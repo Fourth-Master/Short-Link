@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="format-detection" content="telephone=no">
+  <title>请使用系统浏览器打开 - 35短链</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/ui.css">
+</head>
+<body class="browser-page">
+  <main class="browser-guide" aria-labelledby="browserGuideTitle">
+    <header class="browser-guide-hero">
+      <div class="browser-guide-brand">
+        <img src="/logo.webp" alt="" width="40" height="40">
+        <span>35短链</span>
+      </div>
+      <h1 id="browserGuideTitle">请在系统浏览器中打开</h1>
+      <p>微信或 QQ 的内置浏览器限制了当前页面访问。按下面步骤操作即可继续。</p>
+    </header>
+
+    <ol class="browser-steps">
+      <li>点击页面右上角的菜单按钮。</li>
+      <li>选择“在浏览器打开”或“使用默认浏览器打开”。</li>
+      <li>如果没有该选项，请复制下方网址，再粘贴到浏览器地址栏。</li>
+    </ol>
+
+    <p id="current-url" class="browser-current-url" aria-label="当前网址"></p>
+
+    <div class="browser-guide-actions">
+      <button id="copy-btn" class="app-download-btn" type="button">复制当前网址</button>
+      <div id="copy-status" class="browser-copy-status" role="status" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      const currentUrl = window.location.href;
+      const urlElement = document.getElementById('current-url');
+      const copyButton = document.getElementById('copy-btn');
+      const status = document.getElementById('copy-status');
+      urlElement.textContent = currentUrl;
+      urlElement.title = currentUrl;
+
+      async function copyText(value) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+          return;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+
+      copyButton.addEventListener('click', async function() {
+        try {
+          await copyText(currentUrl);
+          copyButton.textContent = '已复制，请到浏览器粘贴';
+          status.textContent = '网址已复制。';
+        } catch (error) {
+          copyButton.textContent = '复制失败，请长按网址复制';
+          status.textContent = '自动复制失败，请长按上方网址手动复制。';
+        }
+        setTimeout(function() {
+          copyButton.textContent = '复制当前网址';
+        }, 2200);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "35-shortlink-worker",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "node scripts/wrangler.mjs dev",
+    "test": "node test/shortlink.test.js && node test/stats.test.js && node --test test/admin-login.test.js test/admin-layout.test.js test/ui-ux.test.js",
+    "check": "node --check src/index.js && node --check src/db/stats.js && node test/shortlink.test.js && node test/stats.test.js && node --test test/admin-login.test.js test/admin-layout.test.js test/ui-ux.test.js",
+    "db:migrate:local": "node scripts/wrangler.mjs d1 migrations apply shortlink-stats --local",
+    "db:migrate:remote": "node scripts/wrangler.mjs d1 migrations apply shortlink-stats --remote",
+    "deploy": "node scripts/wrangler.mjs deploy",
+    "deploy:dry": "node scripts/wrangler.mjs deploy --dry-run"
+  },
+  "devDependencies": {
+    "wrangler": "4.112.0"
+  }
+}

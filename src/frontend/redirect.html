@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0b1220">
+  <title>35短链接 - 跳转中...</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/ui.css">
+</head>
+<body class="redirect-page">
+  <main class="notice-box" aria-labelledby="redirectTitle">
+    <div class="redirect-brand">
+      <img src="/logo.webp" alt="" width="38" height="38">
+      <span>35短链</span>
+    </div>
+
+    <div class="redirect-progress" aria-hidden="true">
+      <span id="count" class="date">3</span>
+    </div>
+
+    <h1 id="redirectTitle" class="title">即将前往目标页面</h1>
+    <p class="redirect-lead">安全检查已完成，页面将在倒计时结束后自动跳转。</p>
+
+    <div class="content" id="normalContent">
+      <p>剩余 <strong><span class="visually-hidden">倒计时</span><span aria-live="polite">约 3 秒</span></strong></p>
+      <div class="redirect-target-shell">
+        <a id="target" class="target-url" href="#" rel="noopener noreferrer" target="_blank" title="在新窗口打开目标网址"></a>
+      </div>
+      <div class="redirect-actions">
+        <button id="copyBtn" class="custom-btn" type="button">复制目标网址</button>
+        <button id="jumpBtn" class="custom-btn" type="button">立即跳转</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // 跳转页面逻辑由后端安全注入；请保持此页只有这一个 script 标签。
+  </script>
+</body>
+</html>

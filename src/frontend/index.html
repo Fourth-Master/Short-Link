@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>免费短链接生成器 - 自定义短链与访问统计 | 35短链</title>
+  <meta name="description" content="35短链是一款免费的短链接生成器，支持自定义短码、有效期、跳转保护和精确访问统计，快速将长网址转换为易分享的短链接。">
+  <meta name="keywords" content="短链接,短网址,短链生成器,网址缩短,自定义短链,访问统计,URL Shortener">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#f6f8fc">
+  <link rel="canonical" href="__SITE_URL__/">
+  <link rel="icon" href="/favicon.ico">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="35短链">
+  <meta property="og:title" content="免费短链接生成器 - 35短链">
+  <meta property="og:description" content="快速生成可自定义、可设置有效期并支持精确访问统计的短链接。">
+  <meta property="og:url" content="__SITE_URL__/">
+  <meta property="og:image" content="__SITE_URL__/logo.webp">
+  <meta property="og:image:alt" content="35短链标志">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="免费短链接生成器 - 35短链">
+  <meta name="twitter:description" content="自定义短码、有效期、跳转保护与精确访问统计。">
+  <meta name="twitter:image" content="__SITE_URL__/logo.webp">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "__SITE_URL__/#application",
+        "name": "35短链",
+        "url": "__SITE_URL__/",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web",
+        "inLanguage": ["zh-CN", "en"],
+        "description": "支持自定义短码、有效期、跳转保护与精确访问统计的免费短链接生成器。",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "__SITE_URL__/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "35短链可以自定义短码吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以。自定义短码支持 6 至 12 位字母和数字，系统会自动检查格式和重复情况。" }
+          },
+          {
+            "@type": "Question",
+            "name": "短链接可以设置有效期吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以设置 1 至 365 天有效期。到期后短链接会停止跳转，并由定时任务清理过期数据。" }
+          },
+          {
+            "@type": "Question",
+            "name": "访问统计是否准确？",
+            "acceptedAnswer": { "@type": "Answer", "text": "访问量采用原子计数记录，避免并发访问时数据丢失，并保留每日访问趋势。" }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="/ui.css">
+</head>
+<body class="public-page">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+  <nav class="top-navbar" aria-label="主导航">
+    <div class="navbar-inner">
+      <a class="nav-logo" href="/" aria-label="35短链首页">
+        <img src="/logo.webp" alt="" class="nav-logo-img" width="40" height="40">
+        <span id="brand" class="nav-title">35短链</span>
+      </a>
+      <div class="nav-links">
+        <a id="home" href="/" class="nav-link" aria-current="page">首页</a>
+        <a id="apiDoc" href="/doc" class="nav-link">API 文档</a>
+      </div>
+      <div class="nav-tool">
+        <button id="langToggleBtn" type="button" aria-label="切换语言">En</button>
+        <button id="themeToggleBtn" type="button" aria-label="切换日夜模式" title="切换日夜模式">
+          <span class="theme-icon theme-icon-moon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.5 8.5 0 1 0 20.2 15.4Z"></path></svg>
+          </span>
+          <span class="theme-icon theme-icon-sun" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content" tabindex="-1">
+    <section class="hero-section" aria-labelledby="heroTitle">
+      <div class="hero-aurora" aria-hidden="true">
+        <span class="aurora-blob aurora-blue"></span>
+        <span class="aurora-blob aurora-cyan"></span>
+      </div>
+      <div class="container hero-layout">
+        <p class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span><span data-home-i18n="heroBadge">免费 · 无需注册 · 打开即用</span></p>
+        <h1 id="heroTitle"><span class="hero-title-main">免费短链接，</span><span class="hero-title-accent" data-home-i18n="heroAccent">一键生成与分享</span></h1>
+        <p id="slogan">快速缩短长网址，支持自定义短码、有效期与精确访问统计。</p>
+
+        <div class="generator-card">
+          <form id="shortenForm" novalidate>
+            <div class="input-group">
+              <label for="longUrl">
+                <span id="longUrlLabel">原始长链接</span>
+                <span class="required-mark" aria-hidden="true">*</span>
+                <span class="visually-hidden">必填</span>
+              </label>
+              <div class="url-field">
+                <span class="url-field-icon" aria-hidden="true">
+                  <svg class="ui-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"></path></svg>
+                </span>
+                <input id="longUrl" type="url" name="longUrl" placeholder="请输入需要缩短的 https:// 链接" required inputmode="url" autocomplete="url" aria-describedby="longUrlTip longUrlError">
+              </div>
+              <small id="longUrlTip">请输入希望缩短并分享的网址。</small>
+              <div id="longUrlError" class="field-error" aria-live="polite"></div>
+            </div>
+
+            <div class="form-options">
+              <div class="input-group">
+                <label for="customCode" id="customCodeLabel">自定义短码（可选）</label>
+                <input id="customCode" type="text" name="customCode" placeholder="例如 mylink88（6-12 位）" maxlength="12" autocomplete="off" aria-describedby="customCodeTip customCodeError">
+                <small id="customCodeTip">仅支持字母和数字；留空将自动生成。</small>
+                <div id="customCodeError" class="field-error" aria-live="polite"></div>
+              </div>
+              <div class="input-group">
+                <label for="expireDays" id="expireDaysLabel">有效期（天）</label>
+                <input id="expireDays" type="number" name="expireDays" min="1" max="365" value="30" inputmode="numeric" aria-describedby="expireDaysTip expireDaysError">
+                <small id="expireDaysTip">默认 30 天，最长 365 天。</small>
+                <div id="expireDaysError" class="field-error" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <button id="generateBtn" type="submit">
+              <span id="btnText">生成短链接</span>
+              <span id="btnLoading" hidden aria-hidden="true">
+                <svg class="ui-icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="38 20">
+                    <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"></animateTransform>
+                  </circle>
+                </svg>
+              </span>
+            </button>
+          </form>
+
+          <div id="result" class="result" role="status" aria-live="polite" hidden></div>
+          <div id="error" class="error" role="alert" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seo-content" aria-labelledby="featureTitle">
+      <header class="seo-heading">
+        <p class="seo-eyebrow" data-home-i18n="featureEyebrow">为分享而生</p>
+        <h2 id="featureTitle" data-home-i18n="featureTitle">不只是把网址变短</h2>
+        <p data-home-i18n="featureIntro">从生成、跳转到统计，35短链把常用能力放进一个轻量、快速的链接工具中。</p>
+      </header>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M13 2 4.5 12.5H11L9.5 22 19 10h-6.5L13 2Z"></path></svg>
+          </span>
+          <h3 data-home-i18n="featureFastTitle">极速跳转</h3>
+          <p data-home-i18n="featureFastDesc">精简跳转链路，让短链接在不同地区、不同设备上都能快速打开。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"></path></svg>
+          </span>
+          <h3 data-home-i18n="featureCustomTitle">链接更易识别</h3>
+          <p data-home-i18n="featureCustomDesc">可自定义 6 至 12 位短码并设置有效期，适合活动、社群和资料分享。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path></svg>
+          </span>
+          <h3 data-home-i18n="featureStatsTitle">精确访问统计</h3>
+          <p data-home-i18n="featureStatsDesc">原子计数避免并发丢失访问量，并保留每日访问趋势。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="seo-content steps-section" aria-labelledby="stepsTitle">
+      <header class="seo-heading">
+        <p class="seo-eyebrow" data-home-i18n="stepsEyebrow">使用流程</p>
+        <h2 id="stepsTitle" data-home-i18n="stepsTitle">三步生成短链接</h2>
+        <p data-home-i18n="stepsIntro">没有学习成本：粘贴、生成、分享。</p>
+      </header>
+      <ol class="steps-grid">
+        <li class="step-card">
+          <span class="step-number" aria-hidden="true">1</span>
+          <h3 data-home-i18n="step1Title">粘贴长链接</h3>
+          <p data-home-i18n="step1Desc">把要分享的网址复制到上方输入框。</p>
+        </li>
+        <li class="step-card">
+          <span class="step-number" aria-hidden="true">2</span>
+          <h3 data-home-i18n="step2Title">生成短链接</h3>
+          <p data-home-i18n="step2Desc">使用自定义短码，或由系统自动生成。</p>
+        </li>
+        <li class="step-card">
+          <span class="step-number" aria-hidden="true">3</span>
+          <h3 data-home-i18n="step3Title">分享与追踪</h3>
+          <p data-home-i18n="step3Desc">发到任意渠道，访问量实时累计。</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="seo-content faq-section" aria-labelledby="faqTitle">
+      <header class="seo-heading">
+        <p class="seo-eyebrow" data-home-i18n="faqEyebrow">常见问题</p>
+        <h2 id="faqTitle" data-home-i18n="faqTitle">关于短链接的常见问题</h2>
+      </header>
+      <div class="faq-list">
+        <details>
+          <summary data-home-i18n="faqCustomQuestion">可以自定义短码吗？</summary>
+          <p data-home-i18n="faqCustomAnswer">可以。短码支持 6 至 12 位字母和数字，系统会检查格式、敏感词与重复情况。</p>
+        </details>
+        <details>
+          <summary data-home-i18n="faqExpireQuestion">短链接可以设置有效期吗？</summary>
+          <p data-home-i18n="faqExpireAnswer">可以设置 1 至 365 天。到期后链接停止跳转，并由定时任务清理长期过期数据。</p>
+        </details>
+        <details>
+          <summary data-home-i18n="faqStatsQuestion">访问统计准确吗？</summary>
+          <p data-home-i18n="faqStatsAnswer">访问量采用原子计数记录，多人同时访问也不会丢失数据，并保留每日访问趋势。</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-bar">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <span id="friend-links-label">友情链接：</span>
+        <span id="friend-links"><a href="https://blog.soeg.cn/" target="_blank" rel="noopener noreferrer">四爷手扎</a></span>
+      </div>
+      <div class="footer-divider" aria-hidden="true"></div>
+      <div class="footer-copyright">
+        <span>Copyright &copy;</span>
+        <span id="copyright-info">2026 35短链 By：四爷</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/i18n.js"></script>
+  <script>
+    (function() {
+      const form = document.getElementById('shortenForm');
+      const generateButton = document.getElementById('generateBtn');
+      const resultRegion = document.getElementById('result');
+      const errorRegion = document.getElementById('error');
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+
+      function renderTexts() {
+        document.documentElement.lang = window.i18n.getLang() === 'zh' ? 'zh-CN' : 'en';
+        document.title = window.i18n.t('title');
+        document.getElementById('home').textContent = window.i18n.t('home');
+        document.getElementById('brand').textContent = window.i18n.t('brand');
+        document.querySelector('.hero-title-main').textContent = window.i18n.t('heroTitle');
+        document.querySelector('.hero-title-accent').textContent = window.i18n.t('heroAccent');
+        document.querySelector('.hero-badge span:last-child').textContent = window.i18n.t('heroBadge');
+        document.getElementById('slogan').textContent = window.i18n.t('slogan');
+        document.getElementById('apiDoc').textContent = window.i18n.t('apiDoc');
+        document.getElementById('longUrlLabel').textContent = window.i18n.t('longUrlLabel');
+        document.getElementById('longUrl').placeholder = window.i18n.t('longUrlPlaceholder');
+        document.getElementById('longUrlTip').textContent = window.i18n.t('longUrlTip');
+        document.getElementById('customCodeLabel').textContent = window.i18n.t('customCodeLabel');
+        document.getElementById('customCode').placeholder = window.i18n.t('customCodePlaceholder');
+        document.getElementById('customCodeTip').textContent = window.i18n.t('customCodeTip');
+        document.getElementById('expireDaysLabel').textContent = window.i18n.t('expireDaysLabel');
+        document.getElementById('expireDaysTip').textContent = window.i18n.t('expireDaysTip');
+        document.getElementById('btnText').textContent = window.i18n.t('generateBtn');
+        document.querySelectorAll('[data-home-i18n]').forEach(function(element) {
+          element.textContent = window.i18n.t(element.getAttribute('data-home-i18n'));
+        });
+        document.getElementById('friend-links-label').textContent = window.i18n.t('friendLinks');
+
+        const languageButton = document.getElementById('langToggleBtn');
+        languageButton.textContent = window.i18n.getLang() === 'zh' ? 'En' : '中';
+        languageButton.setAttribute('aria-label', window.i18n.getLang() === 'zh' ? 'Switch to English' : '切换为中文');
+
+        const themeButton = document.getElementById('themeToggleBtn');
+        const themeLabel = window.i18n.t('themeToggleTitle');
+        themeButton.title = themeLabel;
+        themeButton.setAttribute('aria-label', themeLabel);
+      }
+
+      function setTheme(dark) {
+        document.body.classList.toggle('dark', dark);
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+        if (themeColor) themeColor.content = dark ? '#0b1220' : '#f6f8fc';
+        renderTexts();
+      }
+
+      function setFieldError(input, errorElement, message) {
+        input.setAttribute('aria-invalid', message ? 'true' : 'false');
+        errorElement.textContent = message || '';
+      }
+
+      function validateForm() {
+        const longUrlInput = document.getElementById('longUrl');
+        const customCodeInput = document.getElementById('customCode');
+        const expireDaysInput = document.getElementById('expireDays');
+        const longUrl = longUrlInput.value.trim();
+        const customCode = customCodeInput.value.trim();
+        const expireDays = Number.parseInt(expireDaysInput.value, 10);
+        let firstInvalid = null;
+
+        let urlIsValid = false;
+        try {
+          const parsed = new URL(longUrl);
+          urlIsValid = parsed.protocol === 'http:' || parsed.protocol === 'https:';
+        } catch (error) {
+          urlIsValid = false;
+        }
+
+        const longUrlMessage = urlIsValid ? '' : window.i18n.t('errorLongUrl');
+        const customCodeMessage = !customCode || /^[a-zA-Z0-9]{6,12}$/.test(customCode) ? '' : window.i18n.t('errorCustomCode');
+        const expireMessage = Number.isInteger(expireDays) && expireDays >= 1 && expireDays <= 365 ? '' : window.i18n.t('errorExpire');
+
+        setFieldError(longUrlInput, document.getElementById('longUrlError'), longUrlMessage);
+        setFieldError(customCodeInput, document.getElementById('customCodeError'), customCodeMessage);
+        setFieldError(expireDaysInput, document.getElementById('expireDaysError'), expireMessage);
+
+        if (longUrlMessage) firstInvalid = longUrlInput;
+        else if (customCodeMessage) firstInvalid = customCodeInput;
+        else if (expireMessage) firstInvalid = expireDaysInput;
+
+        if (firstInvalid) firstInvalid.focus();
+        return firstInvalid ? null : { longUrl, customCode, expireDays };
+      }
+
+      function formatExpireDate(timestamp) {
+        return new Intl.DateTimeFormat(window.i18n.getLang() === 'zh' ? 'zh-CN' : 'en', {
+          year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+        }).format(new Date(timestamp));
+      }
+
+      function getExpireSummary(timestamp) {
+        if (!timestamp) return window.i18n.t('resultForever');
+        const days = Math.ceil((timestamp - Date.now()) / 86400000);
+        if (days <= 0) return window.i18n.t('resultExpireExpired');
+        if (days >= 365) return window.i18n.t('resultExpire365');
+        return window.i18n.t('resultExpireDays', { days });
+      }
+
+      async function copyText(value) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+          return;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+
+      function renderResult(data) {
+        const heading = document.createElement('div');
+        heading.className = 'result-heading';
+        heading.textContent = window.i18n.t('resultSuccess');
+
+        const linkRow = document.createElement('div');
+        linkRow.className = 'result-link-row';
+
+        const link = document.createElement('a');
+        link.className = 'result-link';
+        link.href = data.shortUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = data.shortUrl;
+        link.title = data.shortUrl;
+
+        const copyButton = document.createElement('button');
+        copyButton.id = 'copyBtn';
+        copyButton.className = 'result-copy-btn';
+        copyButton.type = 'button';
+        copyButton.textContent = window.i18n.t('resultCopy');
+        copyButton.addEventListener('click', async function() {
+          try {
+            await copyText(data.shortUrl);
+            copyButton.textContent = window.i18n.t('resultCopied');
+            setTimeout(function() {
+              copyButton.textContent = window.i18n.t('resultCopy');
+            }, 1600);
+          } catch (error) {
+            errorRegion.textContent = window.i18n.t('copyTipError');
+            errorRegion.hidden = false;
+          }
+        });
+
+        linkRow.append(link, copyButton);
+
+        const meta = document.createElement('div');
+        meta.className = 'result-meta';
+        const remaining = document.createElement('span');
+        remaining.textContent = window.i18n.t('resultExpire') + getExpireSummary(data.expire);
+        meta.appendChild(remaining);
+        if (data.expire) {
+          const date = document.createElement('span');
+          date.textContent = window.i18n.t('resultExpireDate', { date: formatExpireDate(data.expire) });
+          meta.appendChild(date);
+        }
+
+        resultRegion.replaceChildren(heading, linkRow, meta);
+        resultRegion.hidden = false;
+      }
+
+      function setLoading(loading) {
+        generateButton.disabled = loading;
+        generateButton.setAttribute('aria-busy', String(loading));
+        document.getElementById('btnText').hidden = loading;
+        document.getElementById('btnLoading').hidden = !loading;
+      }
+
+      form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        resultRegion.hidden = true;
+        errorRegion.hidden = true;
+        errorRegion.textContent = '';
+
+        const payload = validateForm();
+        if (!payload) return;
+
+        setLoading(true);
+        try {
+          const response = await fetch('/api/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await response.json();
+          if (!response.ok || data.status !== 1) {
+            errorRegion.textContent = data.msg || window.i18n.t('errorFailed');
+            errorRegion.hidden = false;
+            return;
+          }
+          renderResult(data);
+        } catch (error) {
+          errorRegion.textContent = window.i18n.t('errorNetwork');
+          errorRegion.hidden = false;
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      ['longUrl', 'customCode', 'expireDays'].forEach(function(id) {
+        const input = document.getElementById(id);
+        input.addEventListener('input', function() {
+          if (input.getAttribute('aria-invalid') === 'true') {
+            input.setAttribute('aria-invalid', 'false');
+            document.getElementById(id + 'Error').textContent = '';
+          }
+        });
+      });
+
+      document.getElementById('langToggleBtn').addEventListener('click', function() {
+        window.i18n.setLang(window.i18n.getLang() === 'zh' ? 'en' : 'zh');
+        renderTexts();
+      });
+
+      document.getElementById('themeToggleBtn').addEventListener('click', function() {
+        setTheme(!document.body.classList.contains('dark'));
+      });
+
+      const savedTheme = localStorage.getItem('theme');
+      document.body.classList.toggle('dark', savedTheme === 'dark');
+      if (themeColor && savedTheme === 'dark') themeColor.content = '#0b1220';
+      renderTexts();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0b1220">
+  <title>管理员登录 - 35短链接服务</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/ui.css">
+</head>
+<body class="login-page">
+  <a class="skip-link" href="#main-content">跳到登录表单</a>
+
+  <main id="main-content" class="login-shell" tabindex="-1">
+    <section class="login-brand-panel" aria-label="35短链管理平台介绍">
+      <a class="login-brand" href="/" aria-label="返回 35短链首页">
+        <img src="/logo.webp" alt="" width="46" height="46">
+        <span>35短链管理平台</span>
+      </a>
+
+      <div class="login-brand-copy">
+        <h1>让每条链接都清晰可控</h1>
+        <p>集中管理短链、访问统计、跳转规则与站点配置，保持运营流程简单而可靠。</p>
+        <ul class="login-trust-list">
+          <li>
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+            精确访问统计，数据不丢失
+          </li>
+          <li>
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6l-7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            拼图验证与会话安全
+          </li>
+          <li>
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path></svg>
+            数据密集型后台，快速完成日常操作
+          </li>
+        </ul>
+      </div>
+
+      <small>仅限授权管理员访问</small>
+    </section>
+
+    <section class="login-box" aria-labelledby="loginTitle">
+      <header class="login-header">
+        <h2 id="loginTitle">欢迎回来</h2>
+        <p class="login-subtitle">首次可直接登录；账号或密码输入错误后将启用人机验证。</p>
+      </header>
+
+      <div id="error" class="error" role="alert" aria-live="assertive"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="username">账号</label>
+          <input id="username" type="text" name="username" required autocomplete="username" autocapitalize="none" spellcheck="false">
+        </div>
+
+        <div class="form-group">
+          <label for="password">密码</label>
+          <div class="password-field">
+            <input id="password" type="password" name="password" required autocomplete="current-password">
+            <button id="passwordToggle" class="password-toggle" type="button" aria-label="显示密码" aria-pressed="false">
+              <svg class="ui-icon icon-eye" aria-hidden="true" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+              <svg class="ui-icon icon-eye-off" aria-hidden="true" viewBox="0 0 24 24"><path d="m3 3 18 18"></path><path d="M10.6 6.2A10.7 10.7 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8M6.5 6.5C3.9 8.2 2.5 12 2.5 12S6 18 12 18c1.5 0 2.8-.4 4-1"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="captchaPanel" class="slider-captcha-panel" aria-label="拼图人机验证" hidden>
+          <button id="openCaptchaBtn" class="captcha-trigger" type="button" aria-haspopup="dialog" aria-controls="captchaDialog" aria-expanded="false">
+            <span class="captcha-trigger-icon" aria-hidden="true">
+              <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6l-7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </span>
+            <span class="captcha-trigger-copy">
+              <strong id="captchaTriggerTitle">点击完成人机验证</strong>
+              <small id="captchaTriggerHint">拖动滑块完成拼图</small>
+            </span>
+            <svg class="ui-icon captcha-trigger-arrow" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+
+        <button type="submit" id="loginButton" class="login-btn">
+          <span id="loginButtonText">登录管理后台</span>
+          <svg id="loginButtonSpinner" class="ui-icon" aria-hidden="true" viewBox="0 0 24 24" style="display:none">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="38 20">
+              <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"></animateTransform>
+            </circle>
+          </svg>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <div id="captchaDialog" class="captcha-dialog" role="dialog" aria-modal="true" aria-labelledby="captchaTitle" hidden>
+    <button id="captchaBackdrop" class="captcha-backdrop" type="button" aria-label="关闭人机验证"></button>
+    <section id="captchaWindow" class="captcha-window" tabindex="-1">
+      <h3 id="captchaTitle" class="captcha-title">拖动滑块完成拼图</h3>
+      <div id="captchaWidget" class="slider-captcha-widget" aria-busy="true">
+        <img id="captchaImage" src="/captcha-source-1.webp" alt="拼图验证图片" width="300" height="180" hidden>
+        <div id="captchaLoading" class="captcha-loading">
+          <span class="captcha-loading-spinner" aria-hidden="true"></span>
+          <span id="captchaLoadingText">验证图片加载中...</span>
+        </div>
+        <img id="captchaPiece" class="captcha-piece" src="/captcha-source-1.webp" alt="" width="52" height="52" hidden>
+        <div id="captchaResult" class="captcha-result" role="status" aria-live="polite"></div>
+      </div>
+      <div class="captcha-track" id="captchaTrack">
+        <div id="captchaTrackFill" class="captcha-track-fill" aria-hidden="true"></div>
+        <span id="captchaTrackLabel" class="captcha-track-label">拖动滑块完成拼图</span>
+        <button id="captchaSlider" class="captcha-slider" type="button" role="slider" aria-label="拖动滑块完成拼图" aria-valuemin="0" aria-valuemax="248" aria-valuenow="0">
+          <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m8 5 7 7-7 7"></path><path d="m13 5 7 7-7 7"></path></svg>
+        </button>
+      </div>
+      <footer class="captcha-footer">
+        <a class="captcha-brand" href="/" tabindex="-1">
+          <img src="/logo.webp" alt="" width="24" height="24">
+          <span>35 短链</span>
+        </a>
+        <div class="captcha-actions">
+          <button id="refreshCaptchaBtn" class="captcha-icon-btn" type="button" aria-label="刷新验证码" title="刷新验证码">
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 7v5h-5"></path><path d="M4 17v-5h5"></path><path d="M6.1 8A7 7 0 0 1 18.7 6L20 8M4 16l1.3 2A7 7 0 0 0 17.9 16"></path></svg>
+          </button>
+          <button id="closeCaptchaBtn" class="captcha-icon-btn" type="button" aria-label="关闭验证码" title="关闭验证码">
+            <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <script>
+    let captchaTicket = '';
+    let captchaPosition = 0;
+    let captchaRequired = __CAPTCHA_REQUIRED__;
+    let captchaChallenge = null;
+    let captchaDragging = false;
+    let captchaVerifying = false;
+    let captchaStartX = 0;
+    let captchaStartY = 0;
+    let captchaStartPosition = 0;
+    let captchaStartTime = 0;
+    let captchaTrack = [];
+    let captchaInputMode = 'pointer';
+    let captchaMaxOffset = 248;
+    let loginInProgress = false;
+
+    function setLoginError(message) {
+      const errorDiv = document.getElementById('error');
+      if (!errorDiv) return;
+      errorDiv.textContent = message || '';
+      errorDiv.style.display = message ? 'block' : 'none';
+    }
+
+    function setCaptchaTriggerState(state) {
+      const trigger = document.getElementById('openCaptchaBtn');
+      const title = document.getElementById('captchaTriggerTitle');
+      const hint = document.getElementById('captchaTriggerHint');
+      if (!trigger || !title || !hint) return;
+      trigger.classList.toggle('is-success', state === 'success');
+      title.textContent = state === 'success' ? '人机验证已通过' : '点击完成人机验证';
+      hint.textContent = state === 'success' ? '本次登录可继续提交' : '拖动滑块完成拼图';
+    }
+
+    function updateCaptchaPosition(position, record = false) {
+      captchaPosition = Math.max(0, Math.min(captchaMaxOffset, Math.round(position)));
+      const slider = document.getElementById('captchaSlider');
+      const piece = document.getElementById('captchaPiece');
+      const fill = document.getElementById('captchaTrackFill');
+      if (slider) {
+        slider.style.transform = 'translateX(' + captchaPosition + 'px)';
+        slider.setAttribute('aria-valuenow', String(captchaPosition));
+      }
+      if (piece) piece.style.transform = 'translateX(' + captchaPosition + 'px)';
+      if (fill) fill.style.width = Math.min(300, captchaPosition + 52) + 'px';
+      if (record && captchaStartTime) {
+        const elapsed = Math.round(performance.now() - captchaStartTime);
+        const y = captchaTrack.length ? captchaTrack.at(-1)[1] : 0;
+        const previous = captchaTrack.at(-1);
+        if (!previous || previous[0] !== captchaPosition || elapsed - previous[2] >= 24) {
+          captchaTrack.push([captchaPosition, y, elapsed]);
+        }
+      }
+    }
+
+    function setCaptchaResult(state, message) {
+      const widget = document.getElementById('captchaWidget');
+      const result = document.getElementById('captchaResult');
+      const label = document.getElementById('captchaTrackLabel');
+      if (widget) {
+        widget.classList.toggle('is-success', state === 'success');
+        widget.classList.toggle('is-error', state === 'error');
+        widget.setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
+      }
+      if (result) result.textContent = message || '';
+      if (label) label.textContent = state === 'loading' ? '正在加载验证...' : state === 'success' ? '验证成功' : state === 'error' ? '验证失败，请重试' : '拖动滑块完成拼图';
+    }
+
+    function openCaptcha() {
+      if (!captchaRequired || captchaTicket) return;
+      const dialog = document.getElementById('captchaDialog');
+      const trigger = document.getElementById('openCaptchaBtn');
+      if (dialog) dialog.hidden = false;
+      if (trigger) trigger.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('captcha-open');
+      loadCaptcha();
+      setTimeout(function() { document.getElementById('captchaSlider')?.focus(); }, 0);
+    }
+
+    function closeCaptcha() {
+      const dialog = document.getElementById('captchaDialog');
+      const trigger = document.getElementById('openCaptchaBtn');
+      if (dialog) dialog.hidden = true;
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('captcha-open');
+      trigger?.focus();
+    }
+
+    async function loadCaptcha() {
+      captchaTicket = '';
+      captchaPosition = 0;
+      captchaChallenge = null;
+      captchaVerifying = false;
+      captchaTrack = [];
+      captchaStartTime = 0;
+      updateCaptchaPosition(0);
+      const image = document.getElementById('captchaImage');
+      const piece = document.getElementById('captchaPiece');
+      const loading = document.getElementById('captchaLoading');
+      const widget = document.getElementById('captchaWidget');
+      if (loading) loading.hidden = false;
+      if (image) image.hidden = true;
+      if (piece) piece.hidden = true;
+      setCaptchaResult('loading', '');
+      setCaptchaTriggerState('pending');
+      try {
+        const response = await fetch('/admin/login?captcha=1', { cache: 'no-store' });
+        const data = await response.json();
+        if (!data.challengeId || !data.backgroundImage || !data.pieceImage) throw new Error('captcha unavailable');
+        captchaChallenge = data;
+        captchaMaxOffset = Number(data.maxOffset) || 248;
+        const slider = document.getElementById('captchaSlider');
+        if (slider) slider.setAttribute('aria-valuemax', String(captchaMaxOffset));
+        if (image) { image.src = data.backgroundImage; image.hidden = false; }
+        if (piece) {
+          piece.src = data.pieceImage;
+          piece.style.top = Number(data.pieceTop || 60) + 'px';
+          piece.hidden = false;
+        }
+        if (loading) loading.hidden = true;
+        if (widget) widget.setAttribute('aria-busy', 'false');
+        setCaptchaResult('idle', '');
+      } catch (error) {
+        if (loading) {
+          loading.hidden = false;
+          document.getElementById('captchaLoadingText').textContent = '验证加载失败，请刷新重试';
+        }
+        setCaptchaResult('error', '验证加载失败');
+      }
+    }
+
+    function requireCaptcha(message) {
+      captchaRequired = true;
+      const panel = document.getElementById('captchaPanel');
+      if (panel) panel.hidden = false;
+      captchaTicket = '';
+      setCaptchaTriggerState('pending');
+      if (message) setLoginError(message);
+    }
+
+    async function verifyCaptcha() {
+      if (!captchaChallenge || captchaVerifying || captchaPosition <= 12 || !captchaStartTime) return;
+      captchaVerifying = true;
+      const slider = document.getElementById('captchaSlider');
+      if (slider) slider.disabled = true;
+      const duration = Math.max(1, Math.round(performance.now() - captchaStartTime));
+      const last = captchaTrack.at(-1);
+      if (!last || last[0] !== captchaPosition) captchaTrack.push([captchaPosition, last ? last[1] : 0, duration]);
+      setCaptchaResult('loading', '正在验证...');
+      try {
+        const response = await fetch('/admin/login?captcha=verify', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            challengeId: captchaChallenge.challengeId,
+            position: captchaPosition,
+            duration,
+            mode: captchaInputMode,
+            track: captchaTrack
+          })
+        });
+        const data = await response.json();
+        if (!response.ok || data.status !== 1 || !data.captchaTicket) throw new Error(data.msg || '验证失败，请重试');
+        captchaTicket = data.captchaTicket;
+        setCaptchaResult('success', data.msg || '验证成功');
+        setCaptchaTriggerState('success');
+        setLoginError('');
+        setTimeout(closeCaptcha, 650);
+      } catch (error) {
+        setCaptchaResult('error', error.message || '验证失败，请重试');
+        setTimeout(loadCaptcha, 850);
+      } finally {
+        captchaVerifying = false;
+        if (slider) slider.disabled = false;
+      }
+    }
+
+    function setLoginLoading(loading) {
+      const loginButton = document.getElementById('loginButton');
+      const loginButtonText = document.getElementById('loginButtonText');
+      const loginButtonSpinner = document.getElementById('loginButtonSpinner');
+      if (loginButton) loginButton.disabled = loading;
+      if (loginButtonText) loginButtonText.textContent = loading ? '正在验证...' : '登录管理后台';
+      if (loginButtonSpinner) {
+        loginButtonSpinner.hidden = !loading;
+        loginButtonSpinner.style.display = loading ? 'block' : 'none';
+      }
+    }
+
+    window.addEventListener('load', function() {
+      const panel = document.getElementById('captchaPanel');
+      if (panel) panel.hidden = !captchaRequired;
+      if (captchaRequired) requireCaptcha('请先完成人机验证后登录。');
+    });
+
+    const passwordToggle = document.getElementById('passwordToggle');
+    if (passwordToggle) {
+      passwordToggle.addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const visible = passwordInput.type === 'text';
+        passwordInput.type = visible ? 'password' : 'text';
+        passwordToggle.classList.toggle('is-visible', !visible);
+        passwordToggle.setAttribute('aria-pressed', String(!visible));
+        passwordToggle.setAttribute('aria-label', visible ? '显示密码' : '隐藏密码');
+      });
+    }
+
+    const refreshCaptchaButton = document.getElementById('refreshCaptchaBtn');
+    if (refreshCaptchaButton) {
+      refreshCaptchaButton.addEventListener('click', function() {
+        if (captchaRequired) loadCaptcha();
+      });
+    }
+
+    document.getElementById('openCaptchaBtn')?.addEventListener('click', openCaptcha);
+    document.getElementById('closeCaptchaBtn')?.addEventListener('click', closeCaptcha);
+    document.getElementById('captchaBackdrop')?.addEventListener('click', closeCaptcha);
+
+    const captchaSlider = document.getElementById('captchaSlider');
+    if (captchaSlider) {
+      captchaSlider.addEventListener('pointerdown', function(event) {
+        if (!captchaChallenge || captchaVerifying) return;
+        captchaDragging = true;
+        captchaInputMode = 'pointer';
+        captchaStartX = event.clientX;
+        captchaStartY = event.clientY;
+        captchaStartPosition = captchaPosition;
+        captchaStartTime = performance.now();
+        captchaTrack = [[captchaPosition, 0, 0]];
+        setCaptchaResult('idle', '');
+        captchaSlider.setPointerCapture?.(event.pointerId);
+      });
+      captchaSlider.addEventListener('pointermove', function(event) {
+        if (!captchaDragging) return;
+        const position = captchaStartPosition + event.clientX - captchaStartX;
+        const elapsed = Math.round(performance.now() - captchaStartTime);
+        updateCaptchaPosition(position);
+        const previous = captchaTrack.at(-1);
+        const y = Math.round(event.clientY - captchaStartY);
+        if (!previous || previous[0] !== captchaPosition || elapsed - previous[2] >= 24) captchaTrack.push([captchaPosition, y, elapsed]);
+      });
+      const stopDrag = function(event) {
+        if (!captchaDragging) return;
+        captchaDragging = false;
+        captchaSlider.releasePointerCapture?.(event?.pointerId);
+        verifyCaptcha();
+      };
+      captchaSlider.addEventListener('pointerup', stopDrag);
+      captchaSlider.addEventListener('pointercancel', function() {
+        captchaDragging = false;
+        loadCaptcha();
+      });
+      captchaSlider.addEventListener('keydown', function(event) {
+        if (!['ArrowRight', 'ArrowLeft', 'Home', 'End', 'Enter', ' '].includes(event.key)) return;
+        event.preventDefault();
+        if (!captchaStartTime) {
+          captchaInputMode = 'keyboard';
+          captchaStartTime = performance.now();
+          captchaTrack = [[captchaPosition, 0, 0]];
+        }
+        if (event.key === 'ArrowRight') updateCaptchaPosition(captchaPosition + 6, true);
+        if (event.key === 'ArrowLeft') updateCaptchaPosition(captchaPosition - 6, true);
+        if (event.key === 'Home') updateCaptchaPosition(0, true);
+        if (event.key === 'End') updateCaptchaPosition(captchaMaxOffset, true);
+        if (event.key === 'Enter' || event.key === ' ') verifyCaptcha();
+      });
+    }
+
+    document.addEventListener('keydown', function(event) {
+      const dialog = document.getElementById('captchaDialog');
+      if (dialog?.hidden) return;
+      if (event.key === 'Escape') {
+        closeCaptcha();
+        return;
+      }
+      if (event.key === 'Tab') {
+        const controls = [
+          document.getElementById('captchaSlider'),
+          document.getElementById('refreshCaptchaBtn'),
+          document.getElementById('closeCaptchaBtn')
+        ].filter(Boolean);
+        const current = controls.indexOf(document.activeElement);
+        const next = event.shiftKey
+          ? (current <= 0 ? controls.length - 1 : current - 1)
+          : (current === controls.length - 1 ? 0 : current + 1);
+        event.preventDefault();
+        controls[next].focus();
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      if (loginInProgress) return;
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      setLoginError('');
+
+      if (!username || !password) {
+        setLoginError('请输入管理员账号和密码。');
+        (!username ? document.getElementById('username') : document.getElementById('password')).focus();
+        return;
+      }
+
+      if (captchaRequired && !captchaTicket) {
+        setLoginError('请先完成人机验证');
+        openCaptcha();
+        return;
+      }
+
+      loginInProgress = true;
+      setLoginLoading(true);
+      let loginSucceeded = false;
+      try {
+        const response = await fetch('/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, captchaTicket })
+        });
+        const data = await response.json();
+        if (data.captchaRequired && !captchaRequired) {
+          requireCaptcha('请完成人机验证后再次登录。');
+        }
+        if (data.status === 1) {
+          loginSucceeded = true;
+          setLoginError(data.msg || '登录成功，正在进入后台...');
+          setTimeout(function() {
+            window.location.href = '/admin';
+          }, 300);
+          return;
+        }
+
+        setLoginError(data.msg || '登录失败');
+        if (captchaRequired) {
+          captchaTicket = '';
+          setCaptchaTriggerState('pending');
+        }
+      } catch (error) {
+        setLoginError('登录请求失败，请检查网络后重试');
+        if (captchaRequired) {
+          captchaTicket = '';
+          setCaptchaTriggerState('pending');
+        }
+      } finally {
+        if (!loginSucceeded) {
+          loginInProgress = false;
+          setLoginLoading(false);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

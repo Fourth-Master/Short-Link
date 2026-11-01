@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>短链接 API 文档 - 接口参数与调用示例 | 35短链</title>
+  <meta name="description" content="35短链 API 文档：查看短链接生成接口、请求参数、返回格式、错误响应与调用示例，快速接入网址缩短能力。">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <meta name="theme-color" content="#f6f8fc">
+  <link rel="canonical" href="__SITE_URL__/doc">
+  <link rel="icon" href="/favicon.ico">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="35短链">
+  <meta property="og:title" content="短链接 API 文档 - 35短链">
+  <meta property="og:description" content="生成短链接接口的参数、返回格式、错误说明与可复制调用示例。">
+  <meta property="og:url" content="__SITE_URL__/doc">
+  <meta property="og:image" content="__SITE_URL__/logo.webp">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "35短链 API 文档",
+    "description": "短链接生成接口的请求参数、返回格式和错误说明。",
+    "url": "__SITE_URL__/doc",
+    "inLanguage": "zh-CN",
+    "isPartOf": { "@type": "WebSite", "name": "35短链", "url": "__SITE_URL__/" }
+  }
+  </script>
+  <link rel="stylesheet" href="/ui.css">
+</head>
+<body class="docs-page">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+  <nav class="top-navbar" aria-label="主导航">
+    <div class="navbar-inner">
+      <a class="nav-logo" href="/" aria-label="35短链首页">
+        <img src="/logo.webp" alt="" class="nav-logo-img" width="40" height="40">
+        <span id="brand" class="nav-title">35短链</span>
+      </a>
+      <div class="nav-links">
+        <a id="home" href="/" class="nav-link">首页</a>
+        <a id="apiDoc" href="/doc" class="nav-link" aria-current="page">API 文档</a>
+      </div>
+      <div class="nav-tool">
+        <button id="langToggleBtn" type="button" aria-label="切换语言">En</button>
+        <button id="themeToggleBtn" type="button" aria-label="切换日夜模式" title="切换日夜模式">
+          <span class="theme-icon theme-icon-moon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.5 8.5 0 1 0 20.2 15.4Z"></path></svg>
+          </span>
+          <span class="theme-icon theme-icon-sun" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="doc-container">
+    <header class="doc-header">
+      <p id="docKicker" class="doc-kicker">开发者接口</p>
+      <h1 id="docTitle">35短链 API 文档</h1>
+      <p id="docIntro">通过一个简单的 HTTP 接口生成支持自定义短码和有效期的短链接。</p>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section class="doc-card" aria-labelledby="apiCreateTitle">
+        <h2 id="apiCreateTitle">生成短链接 API</h2>
+        <p id="apiCreateDesc">将原始长网址转换为短链接，可选择自定义短码和有效期。</p>
+        <table>
+          <tbody>
+            <tr><th id="apiTablePathCreate" scope="row">接口路径</th><td><code>/api/create</code></td></tr>
+            <tr><th id="apiTableMethodCreate" scope="row">请求方法</th><td><code>POST</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="apiRequestParamsTitle">请求参数</h3>
+        <table>
+          <thead>
+            <tr><th id="apiTableParam" scope="col">参数名</th><th id="apiTableType" scope="col">类型</th><th id="apiTableRequired" scope="col">必填</th><th id="apiTableDesc" scope="col">说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>longUrl</code></td><td>string</td><td data-i18n-key="yes">是</td><td id="apiLongUrl">需要缩短的 HTTP 或 HTTPS 原始网址。</td></tr>
+            <tr><td><code>customCode</code></td><td>string</td><td data-i18n-key="no">否</td><td id="apiCustomCode">6 至 12 位字母数字短码；留空时自动生成。</td></tr>
+            <tr><td><code>expireDays</code></td><td>number</td><td data-i18n-key="no">否</td><td id="apiExpireDays">有效期天数，默认 30 天，最大 365 天。</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="apiRequestExampleTitle">请求示例</h3>
+        <pre><code>{
+  "longUrl": "https://www.example.com/abc",
+  "customCode": "mycode123",
+  "expireDays": 30
+}</code></pre>
+
+        <h3 id="apiRespTitle">返回示例</h3>
+        <pre><code>{
+  "status": 1,
+  "code": "mycode123",
+  "shortUrl": "__SITE_URL__/s/mycode123",
+  "expire": 1718889600000
+}</code></pre>
+        <p id="apiRespDesc"><code>status=1</code> 表示生成成功，<code>shortUrl</code> 为可直接分享的短链接。</p>
+      </section>
+
+      <section class="doc-card" aria-labelledby="apiErrorTitle">
+        <h2 id="apiErrorTitle">错误响应</h2>
+        <p id="apiErrorDesc">请求参数、网址格式或自定义短码不符合要求时，接口会返回具体错误信息。</p>
+        <pre><code>{
+  "status": 0,
+  "msg": "错误信息"
+}</code></pre>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer-bar">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <span id="friend-links-label">友情链接：</span>
+        <span id="friend-links"><a href="https://blog.soeg.cn/" target="_blank" rel="noopener noreferrer">四爷手扎</a></span>
+      </div>
+      <div class="footer-divider" aria-hidden="true"></div>
+      <div class="footer-copyright">
+        <span>Copyright &copy;</span>
+        <span id="copyright-info">2026 35短链 By：四爷</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/i18n.js"></script>
+  <script>
+    (function() {
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+
+      function renderTexts() {
+        document.documentElement.lang = window.i18n.getLang() === 'zh' ? 'zh-CN' : 'en';
+        document.title = window.i18n.t('apiDocTitle');
+        document.getElementById('brand').textContent = window.i18n.t('brand');
+        document.getElementById('home').textContent = window.i18n.t('home');
+        document.getElementById('apiDoc').textContent = window.i18n.t('apiDoc');
+        document.getElementById('docKicker').textContent = window.i18n.t('docKicker');
+        document.getElementById('docTitle').textContent = window.i18n.t('docTitle');
+        document.getElementById('docIntro').textContent = window.i18n.t('docIntro');
+        document.getElementById('apiCreateTitle').textContent = window.i18n.t('apiCreateTitle');
+        document.getElementById('apiCreateDesc').textContent = window.i18n.t('apiCreateDesc');
+        document.getElementById('apiTablePathCreate').textContent = window.i18n.t('apiTablePath');
+        document.getElementById('apiTableMethodCreate').textContent = window.i18n.t('apiTableMethod');
+        document.getElementById('apiRequestParamsTitle').textContent = window.i18n.t('apiRequestParamsTitle');
+        document.getElementById('apiTableParam').textContent = window.i18n.t('apiTableParam');
+        document.getElementById('apiTableType').textContent = window.i18n.t('apiTableType');
+        document.getElementById('apiTableRequired').textContent = window.i18n.t('apiTableRequired');
+        document.getElementById('apiTableDesc').textContent = window.i18n.t('apiTableDesc');
+        document.getElementById('apiLongUrl').textContent = window.i18n.t('apiLongUrl');
+        document.getElementById('apiCustomCode').textContent = window.i18n.t('apiCustomCode');
+        document.getElementById('apiExpireDays').textContent = window.i18n.t('apiExpireDays');
+        document.getElementById('apiRequestExampleTitle').textContent = window.i18n.t('apiRequestExampleTitle');
+        document.getElementById('apiRespTitle').textContent = window.i18n.t('apiRespTitle');
+        document.getElementById('apiRespDesc').textContent = window.i18n.t('apiRespDesc');
+        document.getElementById('apiErrorTitle').textContent = window.i18n.t('apiErrorTitle');
+        document.getElementById('apiErrorDesc').textContent = window.i18n.t('apiErrorDesc');
+        document.getElementById('friend-links-label').textContent = window.i18n.t('friendLinks');
+
+        document.querySelectorAll('[data-i18n-key]').forEach(function(element) {
+          element.textContent = window.i18n.t(element.getAttribute('data-i18n-key'));
+        });
+
+        const languageButton = document.getElementById('langToggleBtn');
+        languageButton.textContent = window.i18n.getLang() === 'zh' ? 'En' : '中';
+        languageButton.setAttribute('aria-label', window.i18n.getLang() === 'zh' ? 'Switch to English' : '切换为中文');
+
+        const themeButton = document.getElementById('themeToggleBtn');
+        const themeLabel = window.i18n.t('themeToggleTitle');
+        themeButton.title = themeLabel;
+        themeButton.setAttribute('aria-label', themeLabel);
+
+        document.querySelectorAll('.copy-btn').forEach(function(button) {
+          if (button.dataset.state !== 'copied') button.textContent = window.i18n.t('copyBtnText');
+          button.setAttribute('aria-label', window.i18n.t('copyBtnText'));
+        });
+      }
+
+      function setTheme(dark) {
+        document.body.classList.toggle('dark', dark);
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+        if (themeColor) themeColor.content = dark ? '#0b1220' : '#f6f8fc';
+        renderTexts();
+      }
+
+      async function copyText(value) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+          return;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+
+      function addCopyButtons() {
+        document.querySelectorAll('pre').forEach(function(pre, index) {
+          if (pre.querySelector('.copy-btn')) return;
+          const code = pre.querySelector('code');
+          const button = document.createElement('button');
+          const status = document.createElement('span');
+          button.className = 'copy-btn';
+          button.type = 'button';
+          button.textContent = window.i18n.t('copyBtnText');
+          button.setAttribute('aria-label', window.i18n.t('copyBtnText') + ' ' + (index + 1));
+          status.className = 'copy-tip';
+          status.setAttribute('role', 'status');
+          status.setAttribute('aria-live', 'polite');
+          status.hidden = true;
+
+          button.addEventListener('click', async function() {
+            try {
+              await copyText(code ? code.textContent : pre.textContent);
+              button.dataset.state = 'copied';
+              button.textContent = window.i18n.t('copyTipSuccess');
+              status.textContent = window.i18n.t('copyTipSuccess');
+            } catch (error) {
+              button.dataset.state = 'error';
+              button.textContent = window.i18n.t('copyTipError');
+              status.textContent = window.i18n.t('copyTipError');
+            }
+            status.hidden = false;
+            setTimeout(function() {
+              button.dataset.state = '';
+              button.textContent = window.i18n.t('copyBtnText');
+              status.hidden = true;
+            }, 1600);
+          });
+
+          pre.prepend(status);
+          pre.prepend(button);
+        });
+      }
+
+      document.getElementById('langToggleBtn').addEventListener('click', function() {
+        window.i18n.setLang(window.i18n.getLang() === 'zh' ? 'en' : 'zh');
+        renderTexts();
+      });
+
+      document.getElementById('themeToggleBtn').addEventListener('click', function() {
+        setTheme(!document.body.classList.contains('dark'));
+      });
+
+      const savedTheme = localStorage.getItem('theme');
+      document.body.classList.toggle('dark', savedTheme === 'dark');
+      if (themeColor && savedTheme === 'dark') themeColor.content = '#0b1220';
+      addCopyButtons();
+      renderTexts();
+    })();
+  </script>
+</body>
+</html>

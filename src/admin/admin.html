@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0b1220">
+  <title>管理后台 - 35短链接服务</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/ui.css">
+</head>
+<body class="admin-page">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+  <aside class="sidebar" id="adminSidebar">
+    <div class="sidebar-brand">
+      <a class="admin-brand" href="#shortlink" aria-label="35短链管理后台首页">
+        <img src="/logo.webp" alt="" width="40" height="40">
+        <span>35短链<small>管理后台</small></span>
+      </a>
+      <button id="adminNavToggle" class="admin-nav-toggle" type="button" aria-controls="adminNav" aria-expanded="false" aria-label="展开后台导航">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+    </div>
+
+    <nav id="adminNav" class="nav" aria-label="后台导航">
+      <a href="#shortlink" class="active" data-section="shortlink" aria-current="page">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"></path></svg>
+        短链管理
+      </a>
+      <a href="#stats" data-section="stats">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path></svg>
+        访问统计
+      </a>
+      <a href="#blacklist" data-section="blacklist">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m6 6 12 12"></path></svg>
+        黑名单管理
+      </a>
+      <a href="#whitelist" data-section="whitelist">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6l-7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        白名单管理
+      </a>
+      <a href="#log" data-section="log">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18H6z"></path><path d="M9 8h6M9 12h6M9 16h4"></path></svg>
+        操作日志
+      </a>
+      <a href="#friendlink" data-section="friendlink">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1"></path><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20"></path></svg>
+        友情链接管理
+      </a>
+      <a href="#setting" data-section="setting">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path></svg>
+        系统设置
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="logoutButton" class="nav-logout" type="button">
+        <svg class="ui-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9"></path></svg>
+        退出登录
+      </button>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content" tabindex="-1">
+    <!-- 短链管理 -->
+    <section class="section active" id="section-shortlink">
+      <div class="title-bar">
+        <h3>短链管理</h3>
+        <button class="btn" onclick="loadShortlinks()">刷新</button>
+        <button class="btn" onclick="showAddShortlink()">新增短链</button>
+      </div>
+      <div class="form-inline">
+        <input class="input" id="searchShortlink" placeholder="搜索短链/原始链接...">
+        <button class="btn" onclick="searchShortlink()">搜索</button>
+      </div>
+      <div class="shortlink-table-scroll">
+        <table class="table shortlink-table" id="shortlinkTable">
+          <colgroup>
+            <col class="shortlink-col-code">
+            <col class="shortlink-col-url">
+            <col class="shortlink-col-created">
+            <col class="shortlink-col-visits">
+            <col class="shortlink-col-expire">
+            <col class="shortlink-col-validity">
+            <col class="shortlink-col-actions">
+          </colgroup>
+          <thead>
+            <tr><th>短链</th><th>原始链接</th><th>创建时间</th><th>访问量</th><th>到期时间</th><th>有效期</th><th>操作</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="empty-tip" id="shortlinkEmpty" style="display:none;">暂无短链数据</div>
+    </section>
+    <!-- 统计 -->
+    <section class="section" id="section-stats">
+      <div class="title-bar"><h3>访问统计</h3><button class="btn" onclick="loadStats()">刷新</button></div>
+      <div id="statsBoxes">
+        <div class="stat-box"><strong id="statTotal">0</strong>总短链数</div>
+        <div class="stat-box"><strong id="statVisit">0</strong>总访问量</div>
+        <div class="stat-box"><strong id="statToday">0</strong>今日访问量</div>
+      </div>
+      <table class="table" id="statsTable">
+        <thead><tr><th>短链</th><th>访问量</th><th>最后访问</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-tip" id="statsEmpty" style="display:none;">暂无统计数据</div>
+    </section>
+    <!-- 黑名单管理 -->
+    <section class="section" id="section-blacklist">
+      <div class="title-bar">
+        <h3>黑名单管理</h3>
+        <button class="btn" onclick="loadBlacklist()">刷新</button>
+        <button class="btn" onclick="showAddBlacklist()">新增黑名单</button>
+        <button class="btn" onclick="showImportBlacklist()">批量导入</button>
+        <button class="btn" onclick="exportBlacklist()">导出</button>
+      </div>
+      <table class="table" id="blacklistTable">
+        <thead><tr><th>域名/关键词</th><th>添加时间</th><th>操作</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-tip" id="blacklistEmpty" style="display:none;">暂无黑名单数据</div>
+    </section>
+    <!-- 白名单管理 -->
+    <section class="section" id="section-whitelist">
+      <div class="title-bar">
+        <h3>白名单管理</h3>
+        <button class="btn" onclick="loadWhitelist()">刷新</button>
+        <button class="btn" onclick="showAddWhitelist()">新增白名单</button>
+        <button class="btn" onclick="showImportWhitelist()">批量导入</button>
+        <button class="btn" onclick="exportWhitelist()">导出</button>
+      </div>
+      <div class="admin-note">
+        <b>说明：</b>白名单内域名跳转时将不做延时，直接跳转。可用于配置“直跳白名单”域名。
+      </div>
+      <table class="table" id="whitelistTable">
+        <thead><tr><th>域名</th><th>添加时间</th><th>操作</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-tip" id="whitelistEmpty" style="display:none;">暂无白名单数据</div>
+    </section>
+    <section class="section" id="section-log">
+      <div class="title-bar"><h3>操作日志</h3></div>
+      <div class="log-filters">
+        <label>起始日期<input type="date" id="logStartDate"></label>
+        <label>结束日期<input type="date" id="logEndDate"></label>
+        <label>类型<select id="logType"><option value="">全部</option><option value="新增短链">新增短链</option><option value="修改短链">修改短链</option><option value="删除短链">删除短链</option><option value="添加黑名单">添加黑名单</option><option value="移除黑名单">移除黑名单</option><option value="添加白名单">添加白名单</option><option value="移除白名单">移除白名单</option></select></label>
+        <button class="btn" type="button" onclick="loadAdminLogs()">查询</button>
+        <button class="btn btn-danger" type="button" onclick="clearAllAdminLogs()">全部清除</button>
+      </div>
+      <table class="table" id="logTable">
+        <thead><tr><th>时间</th><th>类型</th><th>详情</th><th>操作者</th><th>IP</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="logEmpty" class="empty-tip" style="display:none;">暂无日志</div>
+      <div id="logPager" class="log-pager" aria-label="日志分页"></div>
+    </section>
+       <!-- 友情链接管理 -->
+   <section class="section" id="section-friendlink">
+    <div class="title-bar"><h3>友情链接管理</h3><button class="btn" onclick="loadFriendLinks()">刷新</button><button class="btn" onclick="showAddFriendLink()">新增</button></div>
+    <table class="table" id="friendlinkTable">
+      <thead><tr><th>名称</th><th>URL</th><th>操作</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="empty-tip" id="friendlinkEmpty" style="display:none;">暂无友情链接</div>
+  </section>
+  <!-- 系统设置 -->
+  <section class="section" id="section-setting">
+    <div class="title-bar"><h3>系统设置</h3><button class="btn" onclick="saveSettings()">保存设置</button></div>
+    <div class="form-group">
+      <label for="copyrightInput">版权信息</label>
+      <input class="input" id="copyrightInput" type="text" placeholder="请输入版权信息">
+    </div>
+    <div class="form-group">
+      <label for="headerCodeInput">页头代码</label>
+      <textarea class="input code-input" id="headerCodeInput" rows="6" spellcheck="false" placeholder="粘贴需要插入到页面 &lt;head&gt; 末尾的代码，例如统计脚本、验证 Meta 标签等"></textarea>
+      <small class="form-hint">将注入到所有公开页面的 &lt;head&gt; 结束前；支持 script、meta、link 等标签。</small>
+    </div>
+    <div class="form-group">
+      <label for="footerCodeInput">页脚代码</label>
+      <textarea class="input code-input" id="footerCodeInput" rows="6" spellcheck="false" placeholder="粘贴需要插入到页面末尾的代码"></textarea>
+      <small class="form-hint">将注入到所有公开页面 &lt;/body&gt; 结束前。</small>
+    </div>
+    <div class="admin-note">
+      <b>提示：</b>页头/页脚代码将应用到首页、API 文档、跳转提示页与 404 页；保存后立即生效（页面有最长约 10 分钟的缓存）。
+    </div>
+  </section>
+  </main>
+
+  <!-- 弹窗区 -->
+  <div id="modal" hidden aria-hidden="true"></div>
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script>
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    const pendingAdminRequests = new Map();
+
+    function getAdminSectionForRequest(resource) {
+      const requestUrl = typeof resource === 'string' ? resource : (resource && resource.url) || '';
+      if (!requestUrl.startsWith('/admin/api/')) return '';
+      if (requestUrl.startsWith('/admin/api/links')) return 'shortlink';
+      if (requestUrl.startsWith('/admin/api/stats')) return 'stats';
+      if (requestUrl.startsWith('/admin/api/blacklist')) return 'blacklist';
+      if (requestUrl.startsWith('/admin/api/whitelist')) return 'whitelist';
+      if (requestUrl.startsWith('/admin/api/logs')) return 'log';
+      if (requestUrl.startsWith('/admin/api/friendlink')) return 'friendlink';
+      if (requestUrl.startsWith('/admin/api/setting')) return 'setting';
+      return '';
+    }
+
+    function setSectionBusy(section, busy) {
+      if (!section) return;
+      const panel = document.getElementById('section-' + section);
+      if (panel) panel.setAttribute('aria-busy', String(busy));
+    }
+
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = async function(resource, options) {
+      const section = getAdminSectionForRequest(resource);
+      if (section) {
+        const count = (pendingAdminRequests.get(section) || 0) + 1;
+        pendingAdminRequests.set(section, count);
+        setSectionBusy(section, true);
+      }
+      try {
+        const response = await nativeFetch(resource, { credentials: 'same-origin', ...(options || {}) });
+        if (response.status === 401 && getAdminSectionForRequest(resource)) {
+          window.location.href = '/admin/login';
+        }
+        return response;
+      } catch (error) {
+        if (section) showToast('数据加载失败，请检查网络后重试', 'error');
+        throw error;
+      } finally {
+        if (section) {
+          const count = Math.max(0, (pendingAdminRequests.get(section) || 1) - 1);
+          if (count) pendingAdminRequests.set(section, count);
+          else pendingAdminRequests.delete(section);
+          setSectionBusy(section, count > 0);
+        }
+      }
+    };
+
+    const adminSidebar = document.getElementById('adminSidebar');
+    const adminNavToggle = document.getElementById('adminNavToggle');
+    const adminNavLinks = Array.from(document.querySelectorAll('#adminNav a[data-section]'));
+    let modalLastFocus = null;
+
+    function showToast(message, tone = 'info') {
+      const region = document.getElementById('toastRegion');
+      if (!region || !message) return;
+      const toast = document.createElement('div');
+      toast.className = 'admin-toast';
+      toast.dataset.tone = tone;
+      toast.setAttribute('role', tone === 'error' ? 'alert' : 'status');
+
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('class', 'ui-icon');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.innerHTML = tone === 'error'
+        ? '<circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path>'
+        : '<circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path>';
+
+      const text = document.createElement('p');
+      text.textContent = message;
+      toast.append(icon, text);
+      region.appendChild(toast);
+
+      const dismiss = function() {
+        toast.remove();
+      };
+      toast.addEventListener('click', dismiss);
+      setTimeout(dismiss, tone === 'error' ? 5000 : 3500);
+    }
+
+    window.alert = function(message) {
+      const text = String(message || '');
+      const tone = /失败|错误|请输入|未找到|超时|不可用/.test(text) ? 'error' : 'success';
+      showToast(text, tone);
+    };
+
+    function closeMobileNavigation() {
+      if (!adminSidebar || !adminNavToggle) return;
+      adminSidebar.classList.remove('is-open');
+      adminNavToggle.setAttribute('aria-expanded', 'false');
+      adminNavToggle.setAttribute('aria-label', '展开后台导航');
+    }
+
+    function activateSection(section, options = {}) {
+      const target = document.getElementById('section-' + section);
+      const activeLink = adminNavLinks.find(link => link.dataset.section === section);
+      if (!target || !activeLink) return false;
+
+      adminNavLinks.forEach(function(link) {
+        const active = link === activeLink;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+      document.querySelectorAll('.section').forEach(function(panel) {
+        panel.classList.toggle('active', panel === target);
+      });
+
+      if (options.updateHash !== false && window.location.hash !== '#' + section) {
+        history.pushState(null, '', '#' + section);
+      }
+      if (options.focus) {
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+      }
+      closeMobileNavigation();
+      return true;
+    }
+
+    adminNavLinks.forEach(function(link) {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        activateSection(link.dataset.section, { updateHash: true, focus: true });
+      });
+    });
+
+    if (adminNavToggle) {
+      adminNavToggle.addEventListener('click', function() {
+        const open = adminSidebar.classList.toggle('is-open');
+        adminNavToggle.setAttribute('aria-expanded', String(open));
+        adminNavToggle.setAttribute('aria-label', open ? '收起后台导航' : '展开后台导航');
+      });
+    }
+
+    window.addEventListener('hashchange', function() {
+      activateSection(window.location.hash.slice(1) || 'shortlink', { updateHash: false, focus: true });
+    });
+
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+      logoutButton.addEventListener('click', async function() {
+        logoutButton.disabled = true;
+        try {
+          const response = await fetch('/admin/logout', { method: 'POST' });
+          const data = await response.json();
+          if (!response.ok || data.status !== 1) throw new Error(data.msg || '退出失败');
+          window.location.href = '/admin/login';
+        } catch (error) {
+          showToast(error.message || '退出失败，请重试', 'error');
+          logoutButton.disabled = false;
+        }
+      });
+    }
+    // 数据加载（示例，需对接API）
+    async function loadShortlinks(){
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/links', {headers: {Authorization: token}});
+      const resp = await res.json();
+      let data = [];
+      if(resp && resp.status === 1 && Array.isArray(resp.data)){
+        data = resp.data;
+      }
+      const tbody = document.querySelector('#shortlinkTable tbody');
+      tbody.innerHTML = '';
+      if (data && data.length) {
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${escapeHtml(item.code)}</td><td class='shortlink-url-cell'><span class='shortlink-url' title='${escapeHtml(item.longUrl)}'>${escapeHtml(item.longUrl)}</span></td><td>${item.created ? new Date(item.created).toLocaleString() : ''}</td><td>${item.visits||0}</td><td>${item.expire ? formatExpire(item.expire) : '--'}</td><td>${
+            (function(){
+            if(item.expire){
+              var now=Date.now();
+              var days=Math.ceil((item.expire-now)/86400000);
+              return days>=365?'365天':(days>0?'剩余'+days+'天':'已过期');
+            }else{
+              return '永久';
+            }
+          })()
+          }</td><td class='actions'>
+            <button class='btn' onclick='editShortlink(${JSON.stringify(item)})'>编辑</button>
+            <button class='btn btn-danger' onclick='deleteShortlink("${item.code}")'>删除</button></td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('shortlinkEmpty').style.display = 'none';
+      } else {
+        document.getElementById('shortlinkEmpty').style.display = 'block';
+      }
+    }
+    async function searchShortlink(){
+      const token = localStorage.getItem('admin_token') || '';
+      const kw = document.getElementById('searchShortlink').value.trim();
+      const res = await fetch('/admin/api/links?kw='+encodeURIComponent(kw), {headers: {Authorization: token}});
+      const resp = await res.json();
+      let data = [];
+      if(resp && resp.status === 1 && Array.isArray(resp.data)){
+        data = resp.data;
+      }
+      const tbody = document.querySelector('#shortlinkTable tbody');
+      tbody.innerHTML = '';
+      if (data && data.length) {
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${escapeHtml(item.code)}</td><td class='shortlink-url-cell'><span class='shortlink-url' title='${escapeHtml(item.longUrl)}'>${escapeHtml(item.longUrl)}</span></td><td>${item.created ? new Date(item.created).toLocaleString() : ''}</td><td>${item.visits||0}</td><td>${item.expire ? formatExpire(item.expire) : '--'}</td><td>${
+            (function(){
+              if(item.expire){
+                var now=Date.now();
+                var days=Math.ceil((item.expire-now)/86400000);
+                return days>=365?'365天':(days>0?'剩余'+days+'天':'已过期');
+              }
+              return '永久';
+            })()
+          }</td><td class='actions'>
+            <button class='btn' onclick='editShortlink(${JSON.stringify(item)})'>编辑</button>
+            <button class='btn btn-danger' onclick='deleteShortlink("${item.code}")'>删除</button>
+          </td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('shortlinkEmpty').style.display = 'none';
+      } else {
+        document.getElementById('shortlinkEmpty').style.display = 'block';
+      }
+    }
+    function showAddShortlink(){
+      showModal('新增短链',`<form id='addShortlinkForm' style='display:flex;flex-direction:column;gap:16px;'>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>原始链接 <span style='color:#e53935;'>*</span></label>
+          <input class='input' name='url' required placeholder='请输入需要缩短的原始链接'>
+          <small style='color:#888;font-size:13px;margin-top:2px;'>支持http/https开头的有效链接</small>
+        </div>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>自定义短链(可选)</label>
+          <input class='input' name='custom' placeholder='6-12位字母或数字'>
+          <small style='color:#888;font-size:13px;margin-top:2px;'>如不填写则自动生成</small>
+        </div>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>有效期(天)</label>
+          <input class='input' name='expireDays' type='number' min='0' max='365' value='30'>
+          <small style='color:#888;font-size:13px;margin-top:2px;'>1-365天，0为永久</small>
+        </div>
+        <div class='form-group' style='display:flex;gap:18px;'>
+          <label style='font-weight:normal;'><input type='checkbox' name='delay3s' checked style='margin-right:6px;'> 跳转延时3秒</label>
+        </div>
+        <div style='display:flex;gap:12px;justify-content:flex-end;margin-top:8px;'>
+          <button class='btn' type='submit' style='min-width:80px;'>提交</button>
+          <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+        </div>
+      </form>`);
+      setTimeout(()=>{
+        const form = document.getElementById('addShortlinkForm');
+        if(form){
+          form.onsubmit = async function(e){
+            e.preventDefault();
+            const btn = form.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = '提交中...';
+            const expireDays = parseInt(form.expireDays.value,10);
+            let expire = 0;
+            if(!isNaN(expireDays)){
+              if(expireDays === 0){
+                expire = 0;
+              }else if(expireDays > 0){
+                expire = Date.now() + expireDays*86400000;
+              }
+            }
+            const body = {
+              url: form.url.value.trim(),
+              custom: form.custom.value.trim(),
+              expire,
+              delay: form.delay3s.checked
+            };
+            if(!body.url){alert('请输入原始链接');btn.disabled=false;btn.textContent='提交';return;}
+            if(body.custom && !/^[a-zA-Z0-9]{6,12}$/.test(body.custom)){
+              alert('自定义短链需为6-12位字母或数字');btn.disabled=false;btn.textContent='提交';return;}
+            const token = localStorage.getItem('admin_token')||'';
+            const res = await fetch('/admin/api/links', {method:'POST',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify(body)});
+            const data = await res.json();
+            if(data.status===1){
+              alert('添加成功');
+              closeModal();
+              // 前端直接添加新行
+              const newShortlink = data.data || data;
+              const newShortlinkUrl = newShortlink.longUrl || body.url;
+              const tbody = document.querySelector('#shortlinkTable tbody');
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${escapeHtml(newShortlink.code || body.custom || 'N/A')}</td>
+                            <td class='shortlink-url-cell'><span class='shortlink-url' title='${escapeHtml(newShortlinkUrl)}'>${escapeHtml(newShortlinkUrl)}</span></td>
+                            <td>${newShortlink.created ? new Date(newShortlink.created).toLocaleString() : new Date().toLocaleString()}</td>
+                            <td>${newShortlink.visits || 0}</td>
+                            <td>${newShortlink.expire ? formatExpire(newShortlink.expire) : (body.expire ? formatExpire(body.expire) : '--')}</td>
+                            <td>${ (function(){
+                                  let linkExpire = newShortlink.expire || body.expire;
+                                  if(linkExpire){
+                                    var now=Date.now();
+                                    var days=Math.ceil((linkExpire-now)/86400000);
+                                    return days>=365?'365天':(days>0?'剩余'+days+'天':'已过期');
+                                  }else{
+                                    return '永久';
+                                  }
+                                })()}
+                            </td>
+                            <td class='actions'>
+                              <button class='btn' onclick='editShortlink(${JSON.stringify(newShortlink)})'>编辑</button>
+                              <button class='btn btn-danger' onclick='deleteShortlink("${newShortlink.code || body.custom}")'>删除</button>
+                            </td>`;
+              tbody.insertBefore(tr, tbody.firstChild);
+              document.getElementById('shortlinkEmpty').style.display = 'none';
+            }else{
+              alert(data.msg||'添加失败');
+            }
+            btn.disabled = false;
+            btn.textContent = '提交';
+          };
+        }
+      },100);
+    }
+    function editShortlink(item){
+      showModal('编辑短链',`<form id='editShortlinkForm' style='display:flex;flex-direction:column;gap:16px;'>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>短链码 <span style='color:#e53935;'>*</span></label>
+          <input class='input' name='newCode' value='${item.code}' required pattern='[a-zA-Z0-9]{6,12}' placeholder='请输入6-12位短链码'>
+        </div>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>原始链接 <span style='color:#e53935;'>*</span></label>
+          <input class='input' name='longUrl' value='${item.longUrl||""}' required placeholder='请输入需要缩短的原始链接'>
+        </div>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>有效期(天)</label>
+          <input class='input' name='expireDays' type='number' min='0' max='365' value='${item.expire===0?"0":Math.max(1,Math.ceil((item.expire-Date.now())/86400000))}'>
+          <small style='color:#888;font-size:13px;margin-top:2px;'>0为永久</small>
+        </div>
+        <div class='form-group' style='display:flex;gap:18px;'>
+          <label style='font-weight:normal;'><input type='checkbox' name='delay' ${item.delay!==false?'checked':''} style='margin-right:6px;'> 跳转延时3秒</label>
+        </div>
+        <div style='display:flex;gap:12px;justify-content:flex-end;margin-top:8px;'>
+          <button class='btn' type='submit' style='min-width:80px;'>保存</button>
+          <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+        </div>
+      </form>`);
+      document.getElementById('editShortlinkForm').onsubmit=async function(e){
+        e.preventDefault();
+        const token = localStorage.getItem('admin_token') || '';
+        const form = e.target;
+        const code = item.code;
+        const newCode = form.newCode.value.trim();
+        const longUrl = form.longUrl.value.trim();
+        const expireDays = parseInt(form.expireDays.value,10);
+        const delay = form.delay.checked;
+        if(!newCode||!/^[a-zA-Z0-9]{6,12}$/.test(newCode)){alert('短链码需为6-12位字母或数字');return;}
+        if(!longUrl){alert('请输入原始链接');return;}
+        let expire = 0;
+        if(!isNaN(expireDays)&&expireDays>0){expire = Date.now() + expireDays*86400000;}
+        const body = { newCode, longUrl, expire, delay };
+        const res = await fetch('/admin/api/links/'+encodeURIComponent(code), {method:'PUT',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify(body)});
+        const data = await res.json();
+        if(data.status===1){
+          alert('修改成功');
+          closeModal();
+          // 前端直接更新对应行
+          const updatedShortlink = data.data || { ...item, ...body }; // 优先使用API返回的数据
+          const tbody = document.querySelector('#shortlinkTable tbody');
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          const rowIndex = rows.findIndex(r => r.children[0] && r.children[0].textContent === code);
+          if(rowIndex > -1){
+            const tr = rows[rowIndex];
+            tr.innerHTML = `<td>${updatedShortlink.newCode || updatedShortlink.code}</td>
+                          <td class='shortlink-url-cell'><span class='shortlink-url' title='${escapeHtml(updatedShortlink.longUrl)}'>${escapeHtml(updatedShortlink.longUrl)}</span></td>
+                          <td>${updatedShortlink.created ? new Date(updatedShortlink.created).toLocaleString() : (item.created ? new Date(item.created).toLocaleString() : new Date().toLocaleString())}</td>
+                          <td>${updatedShortlink.visits !== undefined ? updatedShortlink.visits : (item.visits || 0)}</td>
+                          <td>${updatedShortlink.expire ? formatExpire(updatedShortlink.expire) : '--'}</td>
+                          <td>${ (function(){
+                                if(updatedShortlink.expire){
+                                  var now=Date.now();
+                                  var days=Math.ceil((updatedShortlink.expire-now)/86400000);
+                                  return days>=365?'365天':(days>0?'剩余'+days+'天':'已过期');
+                                }else{
+                                  return '永久';
+                                }
+                              })()}
+                          </td>
+                          <td class='actions'>
+                            <button class='btn' onclick='editShortlink(${JSON.stringify(updatedShortlink)})'>编辑</button>
+                            <button class='btn btn-danger' onclick='deleteShortlink("${updatedShortlink.newCode || updatedShortlink.code}")'>删除</button>
+                          </td>`;
+          }
+        }else{
+          alert(data.msg||'修改失败');
+        }
+      };
+    }
+    async function deleteShortlink(short){
+      if(!confirm('确定要删除该短链吗？'))return;
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/links/'+encodeURIComponent(short), {method:'DELETE',headers:{Authorization:token}});
+      const data = await res.json();
+      if(data.status===0 || data.status===1){ // 兼容可能的成功状态码，通常删除成功是 200 OK (status 1 in this api) or 204 No Content (status 0)
+        alert('删除成功');
+        // 前端直接移除对应短链行
+        const tbody = document.querySelector('#shortlinkTable tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        let found = false;
+        for (let i = 0; i < rows.length; i++) {
+          if (rows[i].children[0] && rows[i].children[0].textContent === short) {
+            tbody.removeChild(rows[i]);
+            found = true;
+            break;
+          }
+        }
+        // 若删除后无数据，显示空提示
+        if(tbody.children.length === 0){
+          document.getElementById('shortlinkEmpty').style.display = 'block';
+        }
+      }else{
+        alert(data.msg||'删除失败');
+      }
+    }
+    // 统计数据加载
+    async function loadStats(){
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/stats', {headers: {Authorization: token}});
+      const resp = await res.json();
+      let data = [];
+      if(resp && resp.status === 1 && Array.isArray(resp.stats)){
+        data = resp.stats;
+      }
+      const tbody = document.querySelector('#statsTable tbody');
+      tbody.innerHTML = '';
+      if (data && data.length) {
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${item.code}</td><td>${item.visits||0}</td><td>${item.lastVisit ? new Date(item.lastVisit).toLocaleString() : ''}</td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('statsEmpty').style.display = 'none';
+      } else {
+        document.getElementById('statsEmpty').style.display = 'block';
+      }
+      // 更新统计盒子
+      document.getElementById('statTotal').textContent = resp.totalLinks || 0;
+      document.getElementById('statVisit').textContent = resp.totalVisits || 0;
+      document.getElementById('statToday').textContent = resp.todayVisits || 0;
+    }
+    async function loadBlacklist(){
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/blacklist', {headers: {Authorization: token}});
+      const resp = await res.json();
+      let data = [];
+      if(resp && resp.status === 1 && Array.isArray(resp.data)){
+        data = resp.data;
+      }
+      const tbody = document.querySelector('#blacklistTable tbody');
+      tbody.innerHTML = '';
+      if (data && data.length) {
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${typeof item === 'string' ? item : item.value}</td><td>${item.created ? new Date(item.created).toLocaleString() : ''}</td><td class='actions'><button class='btn' onclick='editBlacklist("${typeof item === 'string' ? item : item.value}",${JSON.stringify(item)})'>编辑</button> <button class='btn btn-danger' onclick='deleteBlacklist("${typeof item === 'string' ? item : item.value}")'>删除</button></td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('blacklistEmpty').style.display = 'none';
+      } else {
+        document.getElementById('blacklistEmpty').style.display = 'block';
+      }
+    }
+    async function loadWhitelist(){
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/whitelist', {headers: {Authorization: token}});
+      const resp = await res.json();
+      let data = [];
+      if(resp && resp.status === 1 && Array.isArray(resp.data)){
+        data = resp.data;
+      }
+      const tbody = document.querySelector('#whitelistTable tbody');
+      tbody.innerHTML = '';
+      if (data && data.length) {
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${item.value}</td><td>${item.created ? new Date(item.created).toLocaleString() : ''}</td><td class='actions'><button class='btn' onclick='editWhitelist("${item.value}",${JSON.stringify(item)})'>编辑</button> <button class='btn btn-danger' onclick='deleteWhitelist("${item.value}")'>删除</button></td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('whitelistEmpty').style.display = 'none';
+      } else {
+        document.getElementById('whitelistEmpty').style.display = 'block';
+      }
+    }
+    function showAddBlacklist(){
+      showModal('新增黑名单',`<form id='addBlacklistForm'>
+        <div class='form-group'><label>域名/关键词</label><input class='input' name='item' required></div>
+        <button class='btn' type='submit'>提交</button>
+      </form>`);
+      document.getElementById('addBlacklistForm').onsubmit=async function(e){
+        e.preventDefault();
+        const token = localStorage.getItem('admin_token') || '';
+        const form = e.target;
+        const body = {item: form.item.value};
+        const res = await fetch('/admin/api/blacklist', {method:'POST',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify(body)});
+        const data = await res.json();
+        if(data.status===1){alert('添加成功');closeModal();loadBlacklist();}else{alert(data.msg||'添加失败');}
+      };
+    }
+    async function deleteBlacklist(item){
+      if(!confirm('确定要删除该黑名单项吗？'))return;
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/blacklist/'+encodeURIComponent(item), {method:'DELETE',headers:{Authorization:token}});
+      const data = await res.json();
+      if(data.status===0){alert('删除成功');loadBlacklist();}else{alert(data.msg||'删除失败');}
+    }
+    function showAddWhitelist(){
+      showModal('新增白名单',`<form id='addWhitelistForm'>
+        <div class='form-group'><label>域名</label><input class='input' name='item' required></div>
+        <button class='btn' type='submit'>提交</button>
+      </form>`);
+      document.getElementById('addWhitelistForm').onsubmit=async function(e){
+        e.preventDefault();
+        const token = localStorage.getItem('admin_token') || '';
+        const form = e.target;
+        const body = {item: form.item.value};
+        const res = await fetch('/admin/api/whitelist', {method:'POST',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify(body)});
+        const data = await res.json();
+        if(data.status===1){alert('添加成功');closeModal();loadWhitelist();}else{alert(data.msg||'添加失败');}
+      };
+    }
+    async function deleteWhitelist(item){
+      if(!confirm('确定要删除该白名单项吗？'))return;
+      const token = localStorage.getItem('admin_token') || '';
+      const res = await fetch('/admin/api/whitelist/'+encodeURIComponent(item), {method:'DELETE',headers:{Authorization:token}});
+      const data = await res.json();
+      if(data.status===0){alert('删除成功');loadWhitelist();}else{alert(data.msg||'删除失败');}
+    }
+    // 页面初始化
+    window.addEventListener('load', function() {
+      const initialSection = window.location.hash.slice(1) || 'shortlink';
+      if (!activateSection(initialSection, { updateHash: false })) {
+        activateSection('shortlink', { updateHash: false });
+      }
+      loadShortlinks();
+      loadStats();
+      loadBlacklist();
+      loadWhitelist();
+    });
+    // 通用弹窗
+    function showModal(title, content) {
+      const modal = document.getElementById('modal');
+      modalLastFocus = document.activeElement;
+      modal.innerHTML = `<div class='modal-content'>
+        <div class='modal-header'>
+          <h2 class='modal-title' id='modalTitle'>${escapeHtml(title)}</h2>
+          <button class='modal-close' type='button' aria-label='关闭弹窗' onclick='closeModal()'>
+            <svg class='ui-icon' aria-hidden='true' viewBox='0 0 24 24'><path d='M6 6l12 12M18 6 6 18'></path></svg>
+          </button>
+        </div>
+        <div class='modal-body'>${content}</div>
+      </div>`;
+      modal.hidden = false;
+      modal.style.display = 'flex';
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-labelledby', 'modalTitle');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+
+      requestAnimationFrame(function() {
+        const focusTarget = modal.querySelector('input, textarea, select, button, [href]');
+        if (focusTarget) focusTarget.focus();
+      });
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      if (!modal || modal.hidden) return;
+      modal.hidden = true;
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      modal.removeAttribute('role');
+      modal.removeAttribute('aria-modal');
+      modal.removeAttribute('aria-labelledby');
+      modal.innerHTML = '';
+      document.body.classList.remove('modal-open');
+      if (modalLastFocus && typeof modalLastFocus.focus === 'function') modalLastFocus.focus();
+    }
+
+    document.getElementById('modal').addEventListener('click', function(event) {
+      if (event.target === event.currentTarget) closeModal();
+    });
+
+    document.addEventListener('keydown', function(event) {
+      const modal = document.getElementById('modal');
+      if (event.key === 'Escape' && modal && !modal.hidden) {
+        event.preventDefault();
+        closeModal();
+        return;
+      }
+      if (event.key === 'Tab' && modal && !modal.hidden) {
+        const focusable = Array.from(modal.querySelectorAll('button:not(:disabled), input:not(:disabled), textarea:not(:disabled), select:not(:disabled), [href], [tabindex]:not([tabindex="-1"])'));
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+function showImportBlacklist(){
+  showModal('批量导入黑名单',`<form id='importBlacklistForm' style='display:flex;flex-direction:column;gap:12px;'>
+    <textarea class='input' name='items' rows='8' placeholder='每行一个域名或关键词'></textarea>
+    <input type='file' id='importBlacklistFile' accept='.txt,.csv' style='margin-bottom:8px;'>
+    <div style='display:flex;gap:12px;justify-content:flex-end;'>
+      <button class='btn' type='submit'>导入</button>
+      <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+    </div>
+  </form>`);
+  setTimeout(()=>{
+    const fileInput = document.getElementById('importBlacklistFile');
+    if(fileInput){
+      fileInput.onchange = function(e){
+        const file = e.target.files[0];
+        if(file){
+          const reader = new FileReader();
+          reader.onload = function(evt){
+            document.querySelector('#importBlacklistForm textarea').value = evt.target.result;
+          };
+          reader.readAsText(file);
+        }
+      };
+    }
+    const form = document.getElementById('importBlacklistForm');
+    if(form){
+      form.onsubmit = async function(e){
+        e.preventDefault();
+        const items = form.items.value.trim().split(/\r?\n/).filter(Boolean);
+        if(!items.length){alert('请输入或上传内容');return;}
+        const token = localStorage.getItem('admin_token') || '';
+        const res = await fetch('/admin/api/blacklist/batch', {method:'POST',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify({items})});
+        const data = await res.json();
+        if(data.status===1){alert('批量导入成功');closeModal();loadBlacklist();}else{alert(data.msg||'导入失败');}
+      };
+    }
+  },100);
+}
+function exportBlacklist(){
+  const token = localStorage.getItem('admin_token') || '';
+  fetch('/admin/api/blacklist', {headers: {Authorization: token}}).then(r=>r.json()).then(resp=>{
+    if(resp && resp.status===1 && Array.isArray(resp.data)){
+      const content = resp.data.map(i=>typeof i === 'string' ? i : i.value).join('\n');
+      const blob = new Blob([content],{type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'blacklist.txt';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},100);
+    }else{alert(resp.msg||'导出失败');}
+  });
+}
+function showImportWhitelist(){
+  showModal('批量导入白名单',`<form id='importWhitelistForm' style='display:flex;flex-direction:column;gap:12px;'>
+    <textarea class='input' name='items' rows='8' placeholder='每行一个域名'></textarea>
+    <input type='file' id='importWhitelistFile' accept='.txt,.csv' style='margin-bottom:8px;'>
+    <div style='display:flex;gap:12px;justify-content:flex-end;'>
+      <button class='btn' type='submit'>导入</button>
+      <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+    </div>
+  </form>`);
+  setTimeout(()=>{
+    const fileInput = document.getElementById('importWhitelistFile');
+    if(fileInput){
+      fileInput.onchange = function(e){
+        const file = e.target.files[0];
+        if(file){
+          const reader = new FileReader();
+          reader.onload = function(evt){
+            document.querySelector('#importWhitelistForm textarea').value = evt.target.result;
+          };
+          reader.readAsText(file);
+        }
+      };
+    }
+    const form = document.getElementById('importWhitelistForm');
+    if(form){
+      form.onsubmit = async function(e){
+        e.preventDefault();
+        const items = form.items.value.trim().split(/\r?\n/).filter(Boolean);
+        if(!items.length){alert('请输入或上传内容');return;}
+        const token = localStorage.getItem('admin_token') || '';
+        const res = await fetch('/admin/api/whitelist/batch', {method:'POST',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify({items})});
+        const data = await res.json();
+        if(data.status===1){alert('批量导入成功');closeModal();loadWhitelist();}else{alert(data.msg||'导入失败');}
+      };
+    }
+  },100);
+}
+function exportWhitelist(){
+  const token = localStorage.getItem('admin_token') || '';
+  fetch('/admin/api/whitelist', {headers: {Authorization: token}}).then(r=>r.json()).then(resp=>{
+    if(resp && resp.status===1 && Array.isArray(resp.data)){
+      const content = resp.data.map(i=>i.value).join('\n');
+      const blob = new Blob([content],{type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'whitelist.txt';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},100);
+    }else{alert(resp.msg||'导出失败');}
+  });
+}
+function exportStats(){
+  const token = localStorage.getItem('admin_token') || '';
+  fetch('/admin/api/stats', {headers: {Authorization: token}}).then(r=>r.json()).then(resp=>{
+    if(resp && resp.status===1 && Array.isArray(resp.stats)){
+      let csv = '短链,访问量,最后访问\n';
+      resp.stats.forEach(i=>{
+        csv += `${i.code},${i.visits||0},${i.lastVisit?new Date(i.lastVisit).toLocaleString():''}\n`;
+      });
+      const blob = new Blob([csv],{type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'stats.csv';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},100);
+    }else{alert(resp.msg||'导出失败');}
+  });
+}
+function editBlacklist(value, item){
+  showModal('编辑黑名单',`<form id='editBlacklistForm'>
+    <div class='form-group'><label>域名/关键词</label><input class='input' name='item' required value='${item.value}'></div>
+    <button class='btn' type='submit'>保存</button>
+    <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+  </form>`);
+  document.getElementById('editBlacklistForm').onsubmit=async function(e){
+    e.preventDefault();
+    const token = localStorage.getItem('admin_token') || '';
+    const form = e.target;
+    const body = {item: form.item.value};
+    const res = await fetch('/admin/api/blacklist/'+encodeURIComponent(value), {method:'PUT',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify(body)});
+    const data = await res.json();
+    if(data.status===1){alert('修改成功');closeModal();loadBlacklist();}else{alert(data.msg||'修改失败');}
+  };
+}
+async function loadAdminLogs(page=1) {
+  const startDate = document.getElementById('logStartDate') ? document.getElementById('logStartDate').value : '';
+  const endDate = document.getElementById('logEndDate') ? document.getElementById('logEndDate').value : '';
+  const type = document.getElementById('logType') ? document.getElementById('logType').value : '';
+  const token = localStorage.getItem('admin_token') || '';
+  let params = [];
+  if(startDate) params.push('startDate='+encodeURIComponent(startDate));
+  if(endDate) params.push('endDate='+encodeURIComponent(endDate));
+  if(type) params.push('type='+encodeURIComponent(type));
+  params.push('page='+page);
+  const query = params.length ? '?' + params.join('&') : '';
+  const res = await fetch(`/admin/api/logs${query}`, {headers: {Authorization: token}});
+  const data = await res.json();
+  const logs = Array.isArray(data.data) ? data.data : [];
+  const total = typeof data.total === 'number' ? data.total : logs.length;
+  const pageSize = typeof data.pageSize === 'number' ? data.pageSize : 50;
+  const pageCount = Math.ceil(total / pageSize);
+  const tbody = document.querySelector('#logTable tbody');
+  tbody.innerHTML = '';
+  if(logs.length === 0){
+    document.getElementById('logEmpty').style.display = 'block';
+    tbody.innerHTML = '';
+  }else{
+    document.getElementById('logEmpty').style.display = 'none';
+    for(const log of logs){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${new Date(log.time).toLocaleString()}</td><td>${escapeHtml(log.action)}</td><td>${escapeHtml(log.detail)}</td><td>${escapeHtml(log.user||'')}</td><td>${escapeHtml(log.ip||'')}</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+  // 分页按钮
+  let pager = '';
+  for(let i=1;i<=pageCount;i++){
+    pager += `<button class='btn ${i===page?'':'btn-secondary'}' type='button' ${i===page?'aria-current="page"':''} onclick='loadAdminLogs(${i})'>${i}</button>`;
+  }
+  document.getElementById('logPager').innerHTML = pager;
+}
+function editWhitelist(value, item){
+  showModal('编辑白名单',`<form id='editWhitelistForm'>
+    <div class='form-group'><label>域名</label><input class='input' name='item' required value='${item.value}'></div>
+    <button class='btn' type='submit'>保存</button>
+    <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+  </form>`);
+  document.getElementById('editWhitelistForm').onsubmit=async function(e){
+    e.preventDefault();
+    const token = localStorage.getItem('admin_token') || '';
+    const form = e.target;
+    const body = {item: form.item.value};
+    const res = await fetch('/admin/api/whitelist/'+encodeURIComponent(value), {method:'PUT',headers:{'Content-Type':'application/json',Authorization:token},body:JSON.stringify(body)});
+    const data = await res.json();
+    if(data.status===1){alert('修改成功');closeModal();loadWhitelist();}else{alert(data.msg||'修改失败');}
+  };
+}
+
+function formatExpire(ts){
+  if(!ts) return '--';
+  const d = new Date(ts);
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+}
+   // 初始化
+   if(document.getElementById('section-friendlink'))loadFriendLinks();
+   if(document.getElementById('section-setting'))loadSettings();
+
+   // 友情链接管理
+   var friendLinks = [];
+   async function loadFriendLinks(){
+     const token = localStorage.getItem('admin_token') || '';
+     fetch('/admin/api/friendlink', {headers: {Authorization: token}})
+       .then(res => res.json())
+       .then(resp => {
+         let data = [];
+         if(resp && resp.status === 1 && Array.isArray(resp.data)){
+           data = resp.data;
+         }
+         const tbody = document.querySelector('#friendlinkTable tbody');
+         tbody.innerHTML = '';
+         if(data && data.length){
+           data.forEach((l,i)=>{
+             const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${escapeHtml(l.name)}</td><td>${escapeHtml(l.url)}</td><td class='actions'><button class='btn' onclick='editFriendLink(${i})'>编辑</button><button class='btn btn-danger' onclick='deleteFriendLink(${i})'>删除</button></td>`;
+             tbody.appendChild(tr);
+           });
+           document.getElementById('friendlinkEmpty').style.display='none';
+         }else{
+           document.getElementById('friendlinkEmpty').style.display='block';
+         }
+         friendLinks = data;
+         window._friendLinks = data;
+       });
+   }
+   function showAddFriendLink(){
+     showModal('新增友情链接',`<form id='addFriendLinkForm' style='display:flex;flex-direction:column;gap:16px;'>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>名称 <span style='color:#e53935;'>*</span></label>
+          <input class='input' name='name' required placeholder='请输入名称'>
+        </div>
+        <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+          <label>URL <span style='color:#e53935;'>*</span></label>
+          <input class='input' name='url' required placeholder='请输入URL'>
+        </div>
+        <div style='display:flex;gap:12px;justify-content:flex-end;margin-top:8px;'>
+          <button class='btn' type='submit' style='min-width:80px;'>提交</button>
+          <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+        </div>
+      </form>`);
+     setTimeout(()=>{
+       const form = document.getElementById('addFriendLinkForm');
+       if(form){
+         form.onsubmit = function(e){
+           e.preventDefault();
+           const btn = form.querySelector('button[type="submit"]');
+           btn.disabled = true;
+           btn.textContent = '提交中...';
+           const name = form.name.value.trim();
+           const url = form.url.value.trim();
+           if(!name){alert('请输入名称');btn.disabled=false;btn.textContent='提交';return;}
+           if(!url){alert('请输入URL');btn.disabled=false;btn.textContent='提交';return;}
+           const token = localStorage.getItem('admin_token') || '';
+           fetch('/admin/api/friendlink', {
+             method: 'POST',
+             headers: {
+               'Content-Type': 'application/json',
+               'Authorization': token
+             },
+             body: JSON.stringify({name, url})
+           }).then(res => res.json()).then(resp => {
+             if (resp && resp.status === 1) {
+               alert('添加成功');
+               loadFriendLinks();
+               closeModal();
+             } else {
+               alert(resp.msg || '添加失败');
+             }
+           }).catch(() => alert('请求失败')).finally(()=>{btn.disabled=false;btn.textContent='提交';});
+         };
+       }
+     },100);
+   }
+   function editFriendLink(idx){
+     const link = friendLinks[idx];
+     if(!link){alert('未找到该友情链接');return;}
+     showModal('编辑友情链接', `
+       <form id='editFriendLinkForm' style='display:flex;flex-direction:column;gap:16px;'>
+         <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+           <label>名称 <span style='color:#e53935;'>*</span></label>
+           <input class='input' name='newName' required placeholder='请输入名称' value='${link.name||""}'>
+         </div>
+         <div class='form-group' style='display:flex;flex-direction:column;align-items:flex-start;'>
+           <label>URL <span style='color:#e53935;'>*</span></label>
+           <input class='input' name='newUrl' required placeholder='请输入URL' value='${link.url||""}'>
+         </div>
+         <input type='hidden' name='oldName' value='${link.name||""}'>
+         <input type='hidden' name='oldUrl' value='${link.url||""}'>
+         <div style='display:flex;gap:12px;justify-content:flex-end;margin-top:8px;'>
+           <button class='btn' type='submit' style='min-width:80px;'>保存</button>
+           <button class='btn btn-secondary' type='button' onclick='closeModal()'>取消</button>
+         </div>
+       </form>
+     `);
+     setTimeout(()=>{
+       const form = document.getElementById('editFriendLinkForm');
+       if(form){
+         form.onsubmit = function(e){
+           e.preventDefault();
+           const btn = form.querySelector('button[type="submit"]');
+           btn.disabled = true;
+           btn.textContent = '保存中...';
+           const newName = form.newName.value.trim();
+           const newUrl = form.newUrl.value.trim();
+           const oldName = form.oldName.value;
+           const oldUrl = form.oldUrl.value;
+           if(!newName){alert('请输入名称');btn.disabled=false;btn.textContent='保存';return;}
+           if(!newUrl){alert('请输入URL');btn.disabled=false;btn.textContent='保存';return;}
+           const token = localStorage.getItem('admin_token') || '';
+           fetch('/admin/api/friendlink', {
+             method: 'PUT',
+             headers: {
+               'Content-Type': 'application/json',
+               'Authorization': token
+             },
+             body: JSON.stringify({oldName, oldUrl, newName, newUrl})
+           }).then(res => res.json()).then(resp => {
+             if (resp && resp.status === 1) {
+               alert('修改成功');
+               closeModal();
+               loadFriendLinks();
+             } else {
+               alert(resp.msg || '修改失败');
+             }
+             btn.disabled = false;
+             btn.textContent = '保存';
+           }).catch(() => {alert('请求失败');btn.disabled=false;btn.textContent='保存';});
+         };
+       }
+     },100);
+   }
+   function deleteFriendLink(idx){
+     const link = friendLinks[idx];
+     if(!link){alert('未找到该友情链接');return;}
+     if(!confirm('确定要删除该友情链接吗？'))return;
+     const token = localStorage.getItem('admin_token') || '';
+     fetch('/admin/api/friendlink/' + encodeURIComponent(link.name), {
+       method: 'DELETE',
+       headers: {
+         'Authorization': token
+       }
+     }).then(res => res.json()).then(resp => {
+       if (resp && resp.status === 1) {
+         alert('删除成功');
+         loadFriendLinks();
+       } else {
+         alert(resp.msg || '删除失败');
+       }
+     }).catch(() => alert('请求失败'));
+   }
+   // 系统设置
+   function loadSettings(){
+     const token = localStorage.getItem('admin_token') || '';
+     fetch('/admin/api/setting/copyright', {headers: {Authorization: token}})
+       .then(res => res.json()).then(data => {
+       document.getElementById('copyrightInput').value = typeof data.data === 'string' ? data.data : '';
+     });
+     fetch('/admin/api/setting/headercode', {headers: {Authorization: token}})
+       .then(res => res.json()).then(data => {
+       document.getElementById('headerCodeInput').value = typeof data.data === 'string' ? data.data : '';
+     });
+     fetch('/admin/api/setting/footercode', {headers: {Authorization: token}})
+       .then(res => res.json()).then(data => {
+       document.getElementById('footerCodeInput').value = typeof data.data === 'string' ? data.data : '';
+     });
+   }
+   async function saveSettings(){
+     const token = localStorage.getItem('admin_token') || '';
+     const copyright = document.getElementById('copyrightInput').value.trim();
+     const headerCode = document.getElementById('headerCodeInput').value;
+     const footerCode = document.getElementById('footerCodeInput').value;
+     const targets = [
+       ['/admin/api/setting/copyright', { copyright }],
+       ['/admin/api/setting/headercode', { code: headerCode }],
+       ['/admin/api/setting/footercode', { code: footerCode }]
+     ];
+     try {
+       for (const [path, body] of targets) {
+         const res = await fetch(path, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json', Authorization: token },
+           body: JSON.stringify(body)
+         });
+         const resp = await res.json();
+         if (!resp || resp.status !== 1) {
+           alert(resp.msg || '保存失败');
+           return;
+         }
+       }
+       alert('保存成功');
+     } catch (error) {
+       alert('请求失败');
+     }
+   }
+// 添加全部清除操作日志功能
+async function clearAllAdminLogs() {
+  if(!confirm('确定要清除全部操作日志吗？此操作不可恢复！')) return;
+  const token = localStorage.getItem('admin_token') || '';
+  const res = await fetch('/admin/api/logs/clear', {method:'POST',headers:{Authorization:token}});
+  const data = await res.json();
+  if(data.status===1){
+    alert('操作日志已全部清除！');
+    loadAdminLogs();
+  }else{
+    alert(data.msg||'清除失败');
+  }
+}
+
+</script>
+</body>
+</html>

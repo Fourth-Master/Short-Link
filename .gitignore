@@ -1,0 +1,9 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env
+*.log
+.wrangler-smoke-*/
+.trae/
+*.psd
+*.stackdump

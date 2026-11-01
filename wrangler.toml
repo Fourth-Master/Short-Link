@@ -1,0 +1,29 @@
+name = "shortlink"
+main = "src/index.js"
+account_id = "e20be59e77fc586735194a9e3eb213e7"
+workers_dev = true
+compatibility_date = "2026-07-21"
+
+routes = [
+  { pattern = "883588.xyz", custom_domain = true },
+  { pattern = "www.883588.xyz", custom_domain = true }
+]
+
+kv_namespaces = [
+  { binding = "LINKS", id = "66121ba83fd84b149b486ca16c9e9aec" }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "shortlink-stats"
+database_id = "71a75c1c-95fd-401c-bb7b-ea7f04beebc4"
+migrations_dir = "migrations"
+
+[vars]
+ADMIN_USER = "Ray"
+SITE_URL = "https://883588.xyz"
+STATS_TIME_ZONE = "Asia/Shanghai"
+STATS_RETENTION_DAYS = "90"
+
+[triggers]
+crons = ["0 * * * *"]
